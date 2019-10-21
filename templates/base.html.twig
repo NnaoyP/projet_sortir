@@ -2,11 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="/assets/css/semantic.min.css" />
+        <link rel="stylesheet" href="/assets/css/style.css" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
+        <script type="javascript" src="/assets/css/semantic.min.js"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
