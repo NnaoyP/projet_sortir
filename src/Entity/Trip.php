@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,22 @@ class Trip
      * @ORM\Column(type="text")
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="trips")
+     */
+    private $Participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="trips")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organizer;
+
+    public function __construct()
+    {
+        $this->Participants = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -120,6 +138,44 @@ class Trip
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Participant[]
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->Participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->Participants->contains($participant)) {
+            $this->Participants[] = $participant;
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->Participants->contains($participant)) {
+            $this->Participants->removeElement($participant);
+        }
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?Participant
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?Participant $organizer): self
+    {
+        $this->organizer = $organizer;
 
         return $this;
     }
