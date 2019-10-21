@@ -49,21 +49,37 @@ class Trip
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="trips")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Participant", inversedBy="participatingTrips")
      */
-    private $Participants;
+    private $participants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="trips")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="organizedTrips")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $organizer;
+    private $organizers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ParticipantArea", inversedBy="trips")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $participantArea;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TripStatus")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TripPlace", inversedBy="trips")
+     */
+    private $places;
 
     public function __construct()
     {
-        $this->Participants = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -147,13 +163,13 @@ class Trip
      */
     public function getParticipants(): Collection
     {
-        return $this->Participants;
+        return $this->participants;
     }
 
     public function addParticipant(Participant $participant): self
     {
-        if (!$this->Participants->contains($participant)) {
-            $this->Participants[] = $participant;
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
         }
 
         return $this;
@@ -161,22 +177,59 @@ class Trip
 
     public function removeParticipant(Participant $participant): self
     {
-        if ($this->Participants->contains($participant)) {
-            $this->Participants->removeElement($participant);
+        if ($this->participants->contains($participant)) {
+            $this->participants->removeElement($participant);
         }
 
         return $this;
     }
 
-    public function getOrganizer(): ?Participant
+    public function getOrganizers(): ?Participant
     {
-        return $this->organizer;
+        return $this->organizers;
     }
 
-    public function setOrganizer(?Participant $organizer): self
+    public function setOrganizers(?Participant $organizers): self
     {
-        $this->organizer = $organizer;
+        $this->organizers = $organizers;
 
         return $this;
     }
+
+    public function getParticipantArea(): ?ParticipantArea
+    {
+        return $this->participantArea;
+    }
+
+    public function setParticipantArea(?ParticipantArea $participantArea): self
+    {
+        $this->participantArea = $participantArea;
+
+        return $this;
+    }
+
+    public function getStatus(): ?TripStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?TripStatus $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getPlaces(): ?TripPlace
+    {
+        return $this->places;
+    }
+
+    public function setPlaces(?TripPlace $places): self
+    {
+        $this->places = $places;
+
+        return $this;
+    }
+
 }

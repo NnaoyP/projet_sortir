@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ParticipantRepository")
  */
-class Participant
+class Participant implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -54,14 +55,27 @@ class Participant
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Trip", mappedBy="Participants")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Trip", mappedBy="participants")
      */
-    private $trips;
+    private $participatingTrips;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Trip", mappedBy="organizers")
+     */
+    private $organizedTrips;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ParticipantArea", inversedBy="participants")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $participantArea;
 
     public function __construct()
     {
-        $this->trips = new ArrayCollection();
+        $this->participatingTrips = new ArrayCollection();
+        $this->organizedTrips = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -155,28 +169,125 @@ class Participant
     /**
      * @return Collection|Trip[]
      */
-    public function getTrips(): Collection
+    public function getParticipatingTrips(): Collection
     {
-        return $this->trips;
+        return $this->participatingTrips;
     }
 
-    public function addTrip(Trip $trip): self
+    public function addParticipatingTrip(Trip $participatingTrip): self
     {
-        if (!$this->trips->contains($trip)) {
-            $this->trips[] = $trip;
-            $trip->addParticipant($this);
+        if (!$this->participatingTrips->contains($participatingTrip)) {
+            $this->participatingTrips[] = $participatingTrip;
+            $participatingTrip->addParticipant($this);
         }
 
         return $this;
     }
 
-    public function removeTrip(Trip $trip): self
+    public function removeParticipatingTrip(Trip $participatingTrip): self
     {
-        if ($this->trips->contains($trip)) {
-            $this->trips->removeElement($trip);
-            $trip->removeParticipant($this);
+        if ($this->participatingTrips->contains($participatingTrip)) {
+            $this->participatingTrips->removeElement($participatingTrip);
+            $participatingTrip->removeParticipant($this);
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Trip[]
+     */
+    public function getOrganizedTrips(): Collection
+    {
+        return $this->organizedTrips;
+    }
+
+    public function addOrganizedTrip(Trip $organizedTrip): self
+    {
+        if (!$this->organizedTrips->contains($organizedTrip)) {
+            $this->organizedTrips[] = $organizedTrip;
+            $organizedTrip->setOrganizers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganizedTrip(Trip $organizedTrip): self
+    {
+        if ($this->organizedTrips->contains($organizedTrip)) {
+            $this->organizedTrips->removeElement($organizedTrip);
+            // set the owning side to null (unless already changed)
+            if ($organizedTrip->getOrganizers() === $this) {
+                $organizedTrip->setOrganizers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParticipantArea(): ?ParticipantArea
+    {
+        return $this->participantArea;
+    }
+
+    public function setParticipantArea(?ParticipantArea $participantArea): self
+    {
+        $this->participantArea = $participantArea;
+
+        return $this;
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        // TODO: Implement getRoles() method.
+        return ['ROLE_USER'];
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+        return $this->getEmail();
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
