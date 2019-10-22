@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "Youth Power";
+    src: url("/assets/font/Youth Power.ttf") format("truetype");
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url("/assets/images/background.jpg");
+
+    /* Add the blur effect */
+    filter: blur(9px) brightness(135%) saturate(75%);
+    -webkit-filter: blur(9px) brightness(135%) saturate(75%);
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+body > .grid {
+    height: 100%;
+}
+.header > .logo {
+    transform: translateY(-15px);
+}
+
+.main-title {
+    font-size: 1.8em;
+}
+
+.youth-power {
+    font-family: "Youth Power", cursive;
+}
