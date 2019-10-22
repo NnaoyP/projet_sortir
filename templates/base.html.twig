@@ -8,17 +8,12 @@
         <link rel="stylesheet" href="/assets/css/transition.min.css" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
-        <script type="javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
-        <script type="javascript" src="/assets/js/semantic.min.js"></script>
-        <script type="javascript" src="/assets/js/visibility.js"></script>
-        <script type="javascript" src="/assets/js/sidebar.min.js"></script>
-        <script type="javascript" src="/assets/js/transition.min.js"></script>
-        <script type="javascript" src="/assets/js/main.js"></script>
     </head>
     <body>
         {% block body %}
+
             <!-- Following Menu -->
-            <div class="ui large top fixed menu transition hidden">
+            <div class="ui large top fixed hidden menu">
                 <div class="ui container">
                     <a class="active item">Home</a>
                     <a class="item">Work</a>
@@ -26,22 +21,22 @@
                     <a class="item">Careers</a>
                     <div class="right menu">
                         <div class="item">
-                            <a class="ui button" href="/login">Log in</a>
+                            <a class="ui button">Log in</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Sidebar Menu -->
-            <div class="ui vertical inverted sidebar menu left" style="">
+            <div class="ui vertical sidebar menu">
                 <a class="active item">Home</a>
                 <a class="item">Work</a>
                 <a class="item">Company</a>
                 <a class="item">Careers</a>
-                <a class="item" href="/login">Login</a>
+                <a class="item">Login</a>
             </div>
 
-            <header class="ui vertical masthead center aligned segment">
+            <div class="ui vertical masthead center aligned segment">
                 <div class="background"></div>
                 <div class="ui container">
                     <div class="ui large secondary pointing menu">
@@ -67,7 +62,7 @@
                         {% block pageTitle %}TEST{% endblock %}
                     </h1>
                 </div>
-            </header>
+            </div>
 
             <div  class="ui middle aligned center aligned grid">
                 <main class="column twelve wide doubling">
@@ -83,6 +78,12 @@
                 </p>
             </footer>
         {% endblock %}
+        <script type="javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
+        <script type="javascript" src="/assets/js/semantic.min.js"></script>
+        <script type="javascript" src="/assets/js/visibility.js"></script>
+        <script type="javascript" src="/assets/js/sidebar.min.js"></script>
+        <script type="javascript" src="/assets/js/transition.min.js"></script>
+        <script type="javascript" src="/assets/js/main.js"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
