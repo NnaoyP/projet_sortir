@@ -4,13 +4,85 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/assets/css/semantic.min.css" />
         <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="stylesheet" href="/assets/css/sidebar.min.css" />
+        <link rel="stylesheet" href="/assets/css/transition.min.css" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+        <script type="javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
+        <script type="javascript" src="/assets/js/semantic.min.js"></script>
+        <script type="javascript" src="/assets/js/visibility.js"></script>
+        <script type="javascript" src="/assets/js/sidebar.min.js"></script>
+        <script type="javascript" src="/assets/js/transition.min.js"></script>
+        <script type="javascript" src="/assets/js/main.js"></script>
     </head>
     <body>
-        <div class="background"></div>
-        {% block body %}{% endblock %}
-        <script type="javascript" src="/assets/css/semantic.min.js"></script>
+        {% block body %}
+            <!-- Following Menu -->
+            <div class="ui large top fixed menu transition hidden">
+                <div class="ui container">
+                    <a class="active item">Home</a>
+                    <a class="item">Work</a>
+                    <a class="item">Company</a>
+                    <a class="item">Careers</a>
+                    <div class="right menu">
+                        <div class="item">
+                            <a class="ui button" href="/login">Log in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <div class="ui vertical inverted sidebar menu left" style="">
+                <a class="active item">Home</a>
+                <a class="item">Work</a>
+                <a class="item">Company</a>
+                <a class="item">Careers</a>
+                <a class="item" href="/login">Login</a>
+            </div>
+
+            <header class="ui vertical masthead center aligned segment">
+                <div class="background"></div>
+                <div class="ui container">
+                    <div class="ui large secondary pointing menu">
+                        <a class="toc item">
+                            <i class="sidebar icon"></i>
+                        </a>
+                        <a class="active item">Home</a>
+                        <a class="item">Work</a>
+                        <a class="item">Company</a>
+                        <a class="item">Careers</a>
+                        <h2 class="center item main-title">
+                            <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="logo" style="width: 30px; transform: translate(5px ,-2px)">
+                            <div class="content youth-power main-title black medium">Sortir <span class="blue">ENI</span></div>
+                        </h2>
+                        <div class="right item">
+                            <a class="ui black button" href="/login">Log in</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui text container">
+                    <h1 class="ui header">
+                        {% block pageTitle %}TEST{% endblock %}
+                    </h1>
+                </div>
+            </header>
+
+            <div  class="ui middle aligned center aligned grid">
+                <main class="column twelve wide doubling">
+                        {% block main %}{% endblock %}
+                </main>
+            </div>
+            <footer class="ui inverted vertical footer center aligned segment">
+                <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
+                <p>Icones crées par
+                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+                    sur le site
+                    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                </p>
+            </footer>
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
