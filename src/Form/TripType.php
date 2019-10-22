@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Trip;
+use App\Entity\TripPlace;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,11 +20,11 @@ class TripType extends AbstractType
             ->add('name', null, [
                 'label' => 'Nom de la sortie'
             ])
-            ->add('startDate', TextType::class, [
-                'label' => 'Date et heure de la sortie'
+            ->add('startDate', DateType::class, [
+                'widget' => 'choice'
             ])
-            ->add('deadlineDate', TextType::class, [
-                'label' => "Date limite d'inscription"
+            ->add('deadlineDate', DateType::class, [
+                'widget' => 'choice'
             ])
             ->add('maxRegistrationNumber', null, [
                 'label' => "Nombre de place"
@@ -30,6 +34,11 @@ class TripType extends AbstractType
             ])
             ->add('description',null, [
                 'label' => "Description et infos"
+            ])
+            ->add('place', EntityType::class, [
+                'label' => 'Lieu',
+                'class' => TripPlace::class,
+                'choice_label' => 'fullname'
             ])
         ;
     }

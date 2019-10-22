@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,10 +57,28 @@ class Participant implements UserInterface
      */
     private $isActive;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ParticipantArea", inversedBy="participants")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $participantArea;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Trip", mappedBy="organizer")
+     */
+    private $organizedTrips;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Trip", inversedBy="participants")
+     */
+    private $participatingTrips;
+
     public function __construct()
     {
         $this->isActive = 1;
         $this->setRoles(['ROLE_USER']);
+        $this->organizedTrips = new ArrayCollection();
+        $this->participatingTrips = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,6 +203,75 @@ class Participant implements UserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getParticipantArea(): ?ParticipantArea
+    {
+        return $this->participantArea;
+    }
+
+    public function setParticipantArea(?ParticipantArea $participantArea): self
+    {
+        $this->participantArea = $participantArea;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trip[]
+     */
+    public function getOrganizedTrips(): Collection
+    {
+        return $this->organizedTrips;
+    }
+
+    public function addOrganizedTrip(Trip $organizedTrip): self
+    {
+        if (!$this->organizedTrips->contains($organizedTrip)) {
+            $this->organizedTrips[] = $organizedTrip;
+            $organizedTrip->setOrganizer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganizedTrip(Trip $organizedTrip): self
+    {
+        if ($this->organizedTrips->contains($organizedTrip)) {
+            $this->organizedTrips->removeElement($organizedTrip);
+            // set the owning side to null (unless already changed)
+            if ($organizedTrip->getOrganizer() === $this) {
+                $organizedTrip->setOrganizer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trip[]
+     */
+    public function getParticipatingTrips(): Collection
+    {
+        return $this->participatingTrips;
+    }
+
+    public function addParticipatingTrip(Trip $participatingTrip): self
+    {
+        if (!$this->participatingTrips->contains($participatingTrip)) {
+            $this->participatingTrips[] = $participatingTrip;
+        }
+
+        return $this;
+    }
+
+    public function removeParticipatingTrip(Trip $participatingTrip): self
+    {
+        if ($this->participatingTrips->contains($participatingTrip)) {
+            $this->participatingTrips->removeElement($participatingTrip);
+        }
 
         return $this;
     }

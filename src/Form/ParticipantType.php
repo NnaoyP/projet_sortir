@@ -3,17 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Participant;
-use App\Entity\ParticipantArea;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegistrationFormType extends AbstractType
+class ParticipantType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -21,16 +19,15 @@ class RegistrationFormType extends AbstractType
             ->add('firstName')
             ->add('phoneNumber')
             ->add('email')
-            ->add('participantArea', EntityType::class, [
-                'class' => ParticipantArea::class,
-                'choice_label' => 'name'
-            ])
             ->add('plainPassword', RepeatedType::class, array(
                 'mapped' => false,
                 'type' => PasswordType::class,
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password')
             ))
+            ->add('participantArea', null, [
+                'choice_label' => 'name'
+            ])
         ;
     }
 
@@ -40,6 +37,4 @@ class RegistrationFormType extends AbstractType
             'data_class' => Participant::class,
         ]);
     }
-
-
 }

@@ -28,9 +28,15 @@ class ParticipantArea
      */
     private $trips;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Participant", mappedBy="participantArea")
+     */
+    private $participants;
+
     public function __construct()
     {
         $this->trips = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +80,37 @@ class ParticipantArea
             // set the owning side to null (unless already changed)
             if ($trip->getParticipantArea() === $this) {
                 $trip->setParticipantArea(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Participant[]
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setParticipantArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->contains($participant)) {
+            $this->participants->removeElement($participant);
+            // set the owning side to null (unless already changed)
+            if ($participant->getParticipantArea() === $this) {
+                $participant->setParticipantArea(null);
             }
         }
 

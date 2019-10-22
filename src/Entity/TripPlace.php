@@ -18,6 +18,8 @@ class TripPlace
      */
     private $id;
 
+    private $fullName;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -57,6 +59,11 @@ class TripPlace
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->getCity()->getName().' - '.$this->getName();
     }
 
     public function getName(): ?string
