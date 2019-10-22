@@ -5,6 +5,11 @@ security:
             entity:
                 class: App\Entity\Participant
                 property: email
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Participant
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -30,6 +35,7 @@ security:
     encoders:
         App\Entity\Participant:
             algorithm: auto
+
 
 
     # Easy way to control access for large sections of your site

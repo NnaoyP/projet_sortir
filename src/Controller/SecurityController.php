@@ -15,40 +15,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/register", name="register")
-     * @param EntityManagerInterface $em
-     * @param Request $request
-     * @param UserPasswordEncoderInterface $encoder
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     */
-    public function register(EntityManagerInterface $em,
-                             Request $request,
-                             UserPasswordEncoderInterface $encoder)
-    {
-        $user = new Participant();
-        $registerForm = $this->createForm(RegisterType::class, $user);
-
-        $registerForm->handleRequest($request);
-        if ($registerForm->isSubmitted() && $registerForm->isValid()) {
-            $hash = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($hash);
-            $em->persist($user);
-            $em->flush();
-            return $this->redirectToRoute("login");
-
-//            $token = new UsernamePasswordToken($user, null,
-//                'main', $user->getRoles());
-//            $this->container->get('security.token_storage')->setToken($token);
-//            $this->container->get('session')->set('_security_main', serialize($token));
-//            return $this->redirectToRoute('article_liste');
-        }
-
-        return $this->render('test/register.html.twig', [
-            'registerForm' => $registerForm->createView()
-        ]);
-    }
-
-    /**
      * @Route("/login", name="login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
