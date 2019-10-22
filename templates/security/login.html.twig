@@ -3,50 +3,56 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <div  class="ui middle aligned center aligned grid" style="width: 100%; background-color: #DADADA">
-        
-        <form method="post" class="ui large form">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+    <div  class="ui middle aligned center aligned grid">
+        <div class="column five wide doubling">
+            <h2 class="ui black header">
+                <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="ui image logo">
+                <div class="content youth-power main-title">Eni Sortir</div>
+            </h2>
+
 
             {% if app.user %}
-                <div class="mb-3">
+                <div class="ui message">
                     You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                 </div>
             {% endif %}
 
+            <form method="post" class="ui large form">
+                {% if error %}
+                    <div class="ui error message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+                    </div>
 
-            <div class="ui stacked segment">
-                <div class="ui input">
-                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+                    <div class="field">
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token('authenticate') }}"
+                    >
+                    <div class="ui checkbox" style="margin: 10px 0 20px 0">
+                        <input type="checkbox" name="_remember_me">
+                        <label>Se souvenir de moi</label>
+                    </div>
+                    <button class="ui fluid large green submit button" type="submit">
+                        Sign in
+                    </button>
                 </div>
 
-                <div class="ui input">
-                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                </div>
-
-                <input type="hidden" name="_csrf_token"
-                       value="{{ csrf_token('authenticate') }}"
-                >
-                <button class="ui button" type="submit">
-                    Sign in
-                </button>
+            </form>
+            <div class="ui message">
+                <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
+                <p>Icones crées par
+                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+                    sur le site
+                    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                </p>
             </div>
+        </div>
 
-            {#
-                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                See https://symfony.com/doc/current/security/remember_me.html
-
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" name="_remember_me"> Remember me
-                    </label>
-                </div>
-            #}
-
-        </form>
     </div>
 {% endblock %}
