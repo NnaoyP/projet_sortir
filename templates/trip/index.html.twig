@@ -10,7 +10,8 @@
                 <div class="ten wide column">
                     <div class="field">
                         <label>Site</label>
-                        <select class="ui search dropdown" name="place" >
+                        <select class="ui search dropdown" name="place">
+                            <option value="">Tous</option>
                             {% for place in places %}
                                 <option value="{{ place.id }}">{{ place.name }}</option>
                             {% endfor %}
