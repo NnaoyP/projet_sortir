@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -187,7 +188,7 @@ class Trip
         return $this->place;
     }
 
-    public function setPlaces(?TripPlace $place): self
+    public function setPlace(?TripPlace $place): self
     {
         $this->place = $place;
 

@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Entity\Trip;
+use App\Entity\TripPlace;
+use App\Entity\TripStatus;
 use App\Form\TripType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TripController extends AbstractController
 {
     /**
-     * @Route("/home", name="home")
+     * @Route("/trip", name="trip")
      */
     public function index()
     {
@@ -25,32 +28,40 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("/trip/add", name="addTrip")
+     * @Route("/trip/add", name="trip_add")
      * @method Participant getUser()
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return Response
+     * @throws Exception
      */
     public function addTrip(Request $request,
                             EntityManagerInterface $em) {
+        // création de la sortie a mapper avec le formulaire
         $trip = new Trip();
+
+        // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
+        $places = $em->getRepository(TripPlace::class)->findAll();
+
+        // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);
 
         $tripType->handleRequest($request);
         if ($tripType->isSubmitted() && $tripType->isValid()) {
-            $status = $this->getDoctrine()->getRepository(Trip::class)->find(1)->getStatus();
+            $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(1);
             $trip->setStatus($status);
+            $trip->setParticipantArea($organizer->getParticipantArea());
             $trip->setOrganizer($organizer);
-            $em->persist($trip);
-            var_dump($trip);
-            //$em->flush();
-        }
 
+            $em->persist($trip);
+            $em->flush();
+        }
 
         return $this->render("trip/add.html.twig", [
             'tripType' => $tripType->createView(),
-            'tripOrganizer' => $organizer
+            'tripOrganizer' => $organizer,
+            'tripPlaces' => $places
         ]);
     }
 }
