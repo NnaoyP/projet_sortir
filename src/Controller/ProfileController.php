@@ -46,7 +46,6 @@ class ProfileController extends AbstractController
         $participantForm = $this->createForm(ParticipantType::class, $participant);
         $participantForm->handleRequest($request);
         if ($participantForm->isSubmitted() && $participantForm->isValid()) {
-            //$article->setDateModification(new \DateTime());
             $em->persist($participant);
             $em->flush();
             return $this->redirectToRoute("profile_detail",

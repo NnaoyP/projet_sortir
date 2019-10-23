@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Participant;
+use App\Entity\ParticipantArea;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -25,8 +27,9 @@ class ParticipantType extends AbstractType
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password')
             ))
-            ->add('participantArea', null, [
-                'choice_label' => 'name'
+            ->add('participantArea', EntityType::class, [
+                'choice_label' => 'name',
+                'class' => ParticipantArea::class
             ])
         ;
     }

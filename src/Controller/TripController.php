@@ -19,14 +19,20 @@ class TripController extends AbstractController
 {
     /**
      * @Route("/trip", name="trip")
+     * @param Request $request
+     * @return Response
      */
-    public function index()
+    public function searchTrip(Request $request)
     {
         // récupération des sorties publiées
+        //$trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
+
         $trips = $this->getDoctrine()->getRepository(Trip::class)->findAll();
+        $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
         return $this->render("trip/index.html.twig", [
-            'controller_name' => 'TripController'
+            'trips' => $trips,
+            'places' => $places
         ]);
     }
 
@@ -52,7 +58,7 @@ class TripController extends AbstractController
         $trip->setStatus($status);
         $trip->setParticipantArea($organizer->getParticipantArea());
         $trip->setOrganizer($organizer);
-
+        $trip->addParticipant($organizer);
 
         // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);
@@ -69,5 +75,23 @@ class TripController extends AbstractController
             'tripOrganizer' => $organizer,
             'tripPlaces' => $places
         ]);
+    }
+
+    /**
+     * @Route("/trip/registerParticipant/{id}", name="trip_register")
+     * @param $tripId
+     */
+    public function addParticipant($tripId) {
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($tripId);
+        $trip->addParticipant($this->getUser());
+    }
+
+    /**
+     * @Route("/trip/removeParticipant/{id}", name ="removeParticipant"
+     * @param $tripId
+     */
+    public function removeParticipant($tripId) {
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($tripId);
+        $trip->removeParticipant($this->getUser());
     }
 }
