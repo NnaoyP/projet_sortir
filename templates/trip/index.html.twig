@@ -1,20 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TripController!{% endblock %}
+{% block title %}Sorties{% endblock %}
+{% block pageTitle %}Liste et recherche des sorties{% endblock %}
 
 {% block main %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <form class="ui form">
+        <div class="ui container field">
+            <div class="ui grid">
+                <div class="ten wide column">
+                    <div class="field">
+                        <label>Site</label>
+                        <select class="ui search dropdown" name="tripPlace">
+                            <option value="NANTES">Nantes</option>
+                            <option value="RENNES">Rennes</option>
+                            <option value="NIORT">Niort</option>
+                        </select>
+                    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                    <div class="field">
+                        <label>Recherche dans le nom :</label>
+                        <div class="ui right icon input">
+                            <i class="tags icon"></i>
+                            <input type="text" placeholder="ex: 'Jeu de Rôle'"/>
+                        </div>
+                    </div>
+                </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/projet_sortir/src/Controller/TripController.php'|file_link(0) }}">src/Controller/TripController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/projet_sortir/templates/trip/detail.html.twig'|file_link(0) }}">templates/trip/index.html.twig</a></code></li>
-    </ul>
-</div>
+                <div class="six wide column" style="transform: translateY(18px)">
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" tabindex="0" class="hidden">
+                            <label>Que j'ai organisé</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" tabindex="0" class="hidden">
+                            <label>Où je participe</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" tabindex="0" class="hidden">
+                            <label>Où je ne participe pas</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" tabindex="0" class="hidden">
+                            <label>Finies</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui center aligned container">
+            <button class="ui blue button" type="submit">
+                <i class="search icon"></i>
+                Rechercher
+            </button>
+        </div>
+    </form>
 {% endblock %}

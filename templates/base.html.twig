@@ -95,7 +95,7 @@
                             <div class="four wide column">
                                 <h2 class="center item main-title" style="transform: scale(1.3) translateX(12px);">
                                     <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="main-logo">
-                                    <div class="content youth-power main-title black medium">Sortir <span class="blue">ENI</span></div>
+                                    <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
                                 </h2>
                             </div>
 
@@ -117,7 +117,7 @@
                                             });
                                             profile.src = `data:image/png;base64,${img}`;
                                         </script>
-                                        <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconexion</a>)</span>
+                                        <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconnexion</a>)</span>
                                     {% else %}
                                         <a class="ui black button" href="/login">Log in</a>
                                     {% endif %}
