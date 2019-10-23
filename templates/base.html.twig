@@ -13,6 +13,9 @@
         <script src="/assets/js/visibility.js"></script>
         <script src="/assets/js/sidebar.js"></script>
         <script src="/assets/js/transition.min.js"></script>
+        <script src="/assets/js/sha1.min.js"></script>
+        <script src="/assets/js/identicon.js-master/pnglib.js"></script>
+        <script src="/assets/js/identicon.js-master/identicon.js"></script>
         <script src="/assets/js/main.js"></script>
     </head>
     <body>
@@ -60,7 +63,21 @@
                             </h2>
                             <div class="right item">
                                 {% if app.user %}
-                                    <img class="ui avatar image" src="/assets/images/square-image.png">
+                                    <img class="ui avatar image"
+                                         src="/assets/images/square-image.png"
+                                         alt="😉"
+                                         id="profile-picture"/>
+                                    <script>
+                                        const username = sha1("{{ app.user.username }}");
+                                        const profile = document.getElementById('profile-picture');
+                                        const img = new Identicon( username, {
+                                            foreground: [0, 0, 0, 255],
+                                            background: [255, 255, 255, 1],
+                                            size: 420,
+                                            format: 'png'
+                                        });
+                                        profile.src = `data:image/png;base64,${img}`;
+                                    </script>
                                     <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconexion</a>)</span>
                                 {% else %}
                                     <a class="ui black button" href="/login">Log in</a>
@@ -83,12 +100,38 @@
                 </div>
 
                 <footer class="ui inverted vertical footer center aligned segment">
-                    <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
-                    <p>Icones crées par
-                        <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
-                        sur le site
-                        <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                    </p>
+                    <div class="container">
+                        <div class="ui stackable inverted divided equal height stackable grid">
+                            <div class="six wide column">
+                                <h4 class="ui inverted header">Images/icones</h4>
+                                <div class="ui inverted link list">
+                                    <a href="https://www.flaticon.com/" class="item">Flaticon</a>
+                                    <a href="https://www.flaticon.com/authors/freepik" class="item">Freepik</a>
+                                    <a href="https://www.dafont.com/youth-power.font" class="item">Police titre</a>
+                                    <a href="https://pixnio.com/fr/nature-paysages/creek-stream-fr/bois-nature-foret-printemps-feuilles-vertes-paysage-feuille-arbre-eau-mousse-aquatique" class="item">Image de fond</a>
+                                </div>
+                            </div>
+
+                            <div class="four wide column">
+                                <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
+                                <p>Icones crées par
+                                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik"></a>
+                                    sur le site
+                                    <a href="" title="Flaticon">www.flaticon.com</a>
+                                </p>
+                            </div>
+
+                            <div class="six wide column">
+                                <h4 class="ui inverted header">Sources</h4>
+                                <div class="ui inverted link list">
+                                    <a href="https://semantic-ui.com/" class="item">Semantic UI</a>
+                                    <a href="https://github.com/emn178/js-sha1" class="item">Librairie SHA-1</a>
+                                    <a href="https://github.com/stewartlord/identicon.js" class="item">Librairie génération d'image de profil</a>
+                                </div>
+                            </div>
+                            <div class="three wide column"></div>
+                        </div>
+                    </div>
                 </footer>
             </div>
         {% endblock %}

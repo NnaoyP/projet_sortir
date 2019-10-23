@@ -1,0 +1,2 @@
+https://semantic-ui.com/
+https://github.com/emn178/js-sha1
