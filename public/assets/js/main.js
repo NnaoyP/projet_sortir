@@ -14,5 +14,6 @@ $(document).ready(function() {
 
     $('.ui.dropdown').dropdown();
     $('.ui.checkbox').checkbox();
+    $('.date-time').calendar({ampm: false});
 });
 
