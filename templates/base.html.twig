@@ -60,6 +60,7 @@
                             </h2>
                             <div class="right item">
                                 {% if app.user %}
+                                    <img class="ui avatar image" src="/assets/images/square-image.png">
                                     <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconexion</a>)</span>
                                 {% else %}
                                     <a class="ui black button" href="/login">Log in</a>
