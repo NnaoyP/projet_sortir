@@ -11,9 +11,9 @@
                     <div class="field">
                         <label>Site</label>
                         <select class="ui search dropdown" name="tripPlace">
-                            <option value="NANTES">Nantes</option>
-                            <option value="RENNES">Rennes</option>
-                            <option value="NIORT">Niort</option>
+                            {% for place in places %}
+                                <option value="{{ place.id }}">{{ place.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
