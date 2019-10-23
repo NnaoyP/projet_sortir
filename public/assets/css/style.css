@@ -29,7 +29,7 @@ html, body {
     transform: scale(1.1);
 }
 
-body > .grid {
+body .grid {
     height: 100%;
 }
 .header > .logo {
@@ -48,16 +48,16 @@ body > .grid {
     font-size: 1.4em;
 }
 
-.main-title>.blue {
-    color: #0d71bb !important;
-}
-
 .youth-power {
     font-family: "Youth Power", cursive;
 }
 
 .white {
     color: white !important;
+}
+
+.blue {
+    color: #0d71bb !important;
 }
 
 
@@ -150,11 +150,11 @@ body > .grid {
     }
 
     .masthead.segment {
-        min-height: 350px;
+        min-height: 200px;
     }
 
     .masthead h1.ui.header {
-        font-size: 2em;
+        font-size: 1em;
         margin-top: 1.5em;
     }
 

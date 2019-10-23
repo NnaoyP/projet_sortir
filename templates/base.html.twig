@@ -8,6 +8,12 @@
         <link rel="stylesheet" href="/assets/css/transition.min.css" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+        <script src="/assets/js/jquery-3.4.1.min.js"></script>
+        <script src="/assets/js/semantic.min.js"></script>
+        <script src="/assets/js/visibility.js"></script>
+        <script src="/assets/js/sidebar.js"></script>
+        <script src="/assets/js/transition.min.js"></script>
+        <script src="/assets/js/main.js"></script>
     </head>
     <body>
         {% block body %}
@@ -36,54 +42,55 @@
                 <a class="item">Login</a>
             </div>
 
-            <div class="ui vertical masthead center aligned segment">
-                <div class="background"></div>
-                <div class="ui container">
-                    <div class="ui large secondary pointing menu">
-                        <a class="toc item">
-                            <i class="sidebar icon"></i>
-                        </a>
-                        <a class="active item">Home</a>
-                        <a class="item">Work</a>
-                        <a class="item">Company</a>
-                        <a class="item">Careers</a>
-                        <h2 class="center item main-title">
-                            <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="logo" style="width: 30px; transform: translate(5px ,-2px)">
-                            <div class="content youth-power main-title black medium">Sortir <span class="blue">ENI</span></div>
-                        </h2>
-                        <div class="right item">
-                            <a class="ui black button" href="/login">Log in</a>
+            <div class="pusher">
+                <div class="ui vertical masthead center aligned segment">
+                    <div class="background"></div>
+                    <div class="ui container">
+                        <div class="ui large secondary pointing menu">
+                            <a class="toc item">
+                                <i class="sidebar icon"></i>
+                            </a>
+                            <a class="active item">Home</a>
+                            <a class="item">Work</a>
+                            <a class="item">Company</a>
+                            <a class="item">Careers</a>
+                            <h2 class="center item main-title">
+                                <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="logo" style="width: 30px; transform: translate(5px ,-2px)">
+                                <div class="content youth-power main-title black medium">Sortir <span class="blue">ENI</span></div>
+                            </h2>
+                            <div class="right item">
+                                {% if app.user %}
+                                    <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconexion</a>)</span>
+                                {% else %}
+                                    <a class="ui black button" href="/login">Log in</a>
+                                {% endif %}
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="ui text container">
+                        <h1 class="ui header">
+                            {% block pageTitle %}TEST{% endblock %}
+                        </h1>
                     </div>
                 </div>
 
-                <div class="ui text container">
-                    <h1 class="ui header">
-                        {% block pageTitle %}TEST{% endblock %}
-                    </h1>
-                </div>
-            </div>
-
-            <div  class="ui middle aligned center aligned grid">
-                <main class="column twelve wide doubling">
+                <div class="ui vertical stripe segment" style="min-height: 70vh">
+                    <main class="ui middle aligned stackable grid container">
                         {% block main %}{% endblock %}
-                </main>
+                    </main>
+                </div>
+
+                <footer class="ui inverted vertical footer center aligned segment">
+                    <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
+                    <p>Icones crées par
+                        <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+                        sur le site
+                        <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                    </p>
+                </footer>
             </div>
-            <footer class="ui inverted vertical footer center aligned segment">
-                <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
-                <p>Icones crées par
-                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
-                    sur le site
-                    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                </p>
-            </footer>
         {% endblock %}
-        <script type="javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
-        <script type="javascript" src="/assets/js/semantic.min.js"></script>
-        <script type="javascript" src="/assets/js/visibility.js"></script>
-        <script type="javascript" src="/assets/js/sidebar.min.js"></script>
-        <script type="javascript" src="/assets/js/transition.min.js"></script>
-        <script type="javascript" src="/assets/js/main.js"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
