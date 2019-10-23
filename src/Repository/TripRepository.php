@@ -46,25 +46,25 @@ class TripRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('t');
 
         // recherche par site
-        if(!empty($args->get('tripPlace'))) {
-            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.name LIKE :value')
-                ->setParameter('value', '%'.$args->get('tripPlace').'%');
+        if(!empty($args->get('place'))) {
+            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :value')
+                ->setParameter('value', $args->get('place'));
         }
 
         // recherche par nom de sortie
-        if(!empty($args->get('tripName'))) {
-            $queryBuilder->where('trip.name LIKE :value')
-                ->setParameter('value', '%'.$args->get('tripName'.'%'));
+        if(!empty($args->get('name'))) {
+            $queryBuilder->andWhere('t.name LIKE :value')
+                ->setParameter('value', ('%'.$args->get('name').'%'));
         }
-
+/*
         // recherche par date de sorties (après le)
-        if (!empty($args->get('tripBeginDate'))) {
+        if (!empty($args->get('beginDate'))) {
             $queryBuilder->andWhere('t.startDate >= :value')
                 ->setParameter('value', $args->get('tripBeginDate'));
         }
 
         // recherche par date de sorties (avant le)
-        if (!empty($args->get('tripEndDate'))) {
+        if (!empty($args->get('endDate'))) {
             $queryBuilder->andWhere('t.startDate <= :value')
                 ->setParameter('value', $args->get('tripEndDate'));
         }
@@ -75,24 +75,14 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('value', $args->get('isOrganizer'));
         }
 
-        // recherche dont la sortie est organisée par l'utilisteur
-        if (!empty($args->get('isRegistered'))) {
+        // recherche dont l'utilisateur est un participant
+        if (!empty($args->get('isParticipantOn'))) {
             $queryBuilder->innerJoin('t.participants', 'o', join::WITH, 'o.name = :value')
                 ->setParameter('value', $args->get('isRegistered'));
         }
-
+*/
 
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    public function findAllOpen(): ?array
-    {
-        return $this->createQueryBuilder('trip')
-            ->addSelect('status')
-            ->innerJoin('trip.status','status', Join::WITH, 'status.id = 1')
-            ->getQuery()
-            ->getResult()
-        ;
     }
 }

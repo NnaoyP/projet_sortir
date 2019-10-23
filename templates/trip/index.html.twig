@@ -10,7 +10,7 @@
                 <div class="ten wide column">
                     <div class="field">
                         <label>Site</label>
-                        <select class="ui search dropdown" name="tripPlace">
+                        <select class="ui search dropdown" name="place" >
                             {% for place in places %}
                                 <option value="{{ place.id }}">{{ place.name }}</option>
                             {% endfor %}
@@ -21,7 +21,7 @@
                         <label>Recherche dans le nom :</label>
                         <div class="ui right icon input">
                             <i class="tags icon"></i>
-                            <input type="text" placeholder="ex: 'Jeu de Rôle'"/>
+                            <input type="text" placeholder="ex: 'Jeu de Rôle'" name="name"/>
                         </div>
                     </div>
                 </div>
@@ -29,25 +29,25 @@
                 <div class="six wide column" style="transform: translateY(18px)">
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isOrganizer">
                             <label>Que j'ai organisé</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOn">
                             <label>Où je participe</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOff">
                             <label>Où je ne participe pas</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isDone">
                             <label>Finies</label>
                         </div>
                     </div>

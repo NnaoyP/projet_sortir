@@ -18,17 +18,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class TripController extends AbstractController
 {
     /**
-     * @Route("/trip", name="trip")
+     * @Route("/trip", name="trip_get", methods={"GET"})
+     * @return Response
+     */
+    public function searchTrip()
+    {
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAll();
+        $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
+
+        return $this->render("trip/index.html.twig", [
+            'trips' => $trips,
+            'places' => $places
+        ]);
+    }
+
+    /**
+     * @Route("/trip", name="trip_post", methods={"POST"})
      * @param Request $request
      * @return Response
      */
-    public function searchTrip(Request $request)
+    public function searchTripWithFilter(Request $request)
     {
         // récupération des sorties publiées
         //$trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
 
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAll();
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
+
+        dd($trips);
 
         return $this->render("trip/index.html.twig", [
             'trips' => $trips,
