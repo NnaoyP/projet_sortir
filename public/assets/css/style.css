@@ -36,8 +36,11 @@ body .grid {
     transform: translateY(-15px);
 }
 
-.logo.medium {
-    transform: translate(19px ,-3px);
+.main-logo {
+    position: absolute !important;
+    width: 30px !important;
+    transform: translate(-50% ,-2px) !important;
+    margin-left: calc(50% - 1em * 3 - -2px) !important;
 }
 
 .main-title {
@@ -135,7 +138,7 @@ body .grid {
 }
 
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 768px) {
     .ui.fixed.menu {
         display: none !important;
     }
