@@ -87,7 +87,7 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("/trip/removeParticipant/{id}", name ="removeParticipant"
+     * @Route("/trip/removeParticipant/{id}", name ="removeParticipant")
      * @param $tripId
      */
     public function removeParticipant($tripId) {
