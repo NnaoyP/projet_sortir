@@ -21,37 +21,49 @@ class Trip
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min = 4, max = 100, minMessage = "Le nom de la sortie doit contenir au moins {{ limit }} caractères",maxMessage = "Le nom de la sortie ne peut pas excèder {{ limit }} caracètres")
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\GreaterThan("today", message="Votre date de sortie doit être supérieur à aujourd'hui")
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(min = 15, max = 360, minMessage = "Votre sortie doit faire au moins {{ limit }} minutes",maxMessage = "Votre sortie doit faire au plus {{ limit }} minutes")
      */
     private $duration;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\Expression("this.getStartDate() > this.getDeadlineDate()", message="La date limite d'inscription doit être inférieur à la date de la sortie")
      */
     private $deadlineDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(min = 2, max = 50, minMessage = "Vous ne pouvez pas organiser une sortie pour vous seuelement",maxMessage = "Votre sortie ne peut excéder {{ limit }} personnes")
      */
     private $maxRegistrationNumber;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ParticipantArea", inversedBy="trips")
      * @ORM\JoinColumn(nullable=true)
+     * @Assert\NotBlank
      */
     private $participantArea;
 
@@ -69,6 +81,7 @@ class Trip
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="organizedTrips")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $organizer;
 
@@ -80,6 +93,10 @@ class Trip
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->setStartDate(new \DateTime());
+        $this->setDeadlineDate(new \DateTime());
+        $this->setDuration(15);
+        $this->setMaxRegistrationNumber(2);
     }
 
     public function getId(): ?int

@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Trip;
+use App\Entity\TripStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @method Trip|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,15 +38,20 @@ class TripRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Trip
+
+    public function findByFilter($args): ?array
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
+
+
+    }
+
+    public function findAllOpen(): ?array
+    {
+        return $this->createQueryBuilder('trip')
+            ->addSelect('status')
+            ->innerJoin('trip.status','status', Join::WITH, 'status.id = 1')
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

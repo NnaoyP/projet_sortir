@@ -22,6 +22,9 @@ class TripController extends AbstractController
      */
     public function index()
     {
+        // récupération des sorties publiées
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAll();
+
         return $this->render("trip/index.html.twig", [
             'controller_name' => 'TripController'
         ]);
@@ -40,19 +43,22 @@ class TripController extends AbstractController
         // création de la sortie a mapper avec le formulaire
         $trip = new Trip();
 
+
         // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
         $places = $em->getRepository(TripPlace::class)->findAll();
+
+        $status = $em->getRepository(TripStatus::class)->find(1);
+        $trip->setStatus($status);
+        $trip->setParticipantArea($organizer->getParticipantArea());
+        $trip->setOrganizer($organizer);
+
 
         // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);
 
         $tripType->handleRequest($request);
         if ($tripType->isSubmitted() && $tripType->isValid()) {
-            $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(1);
-            $trip->setStatus($status);
-            $trip->setParticipantArea($organizer->getParticipantArea());
-            $trip->setOrganizer($organizer);
 
             $em->persist($trip);
             $em->flush();
