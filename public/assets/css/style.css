@@ -63,6 +63,11 @@ body .grid {
     color: #0d71bb !important;
 }
 
+.link-active {
+    font-weight: 700 !important;
+    border-bottom: black 2px solid !important;
+}
+
 /*
     SEMANTIC UI CLASSES
 */

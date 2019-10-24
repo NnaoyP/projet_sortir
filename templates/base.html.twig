@@ -32,7 +32,7 @@
             {% set route = app.request.attributes.get('_route') %}
 
             <!-- Following Menu -->
-            <div class="ui large top fixed hidden menu">
+            <div class="ui large top fixed hidden inverted menu">
                 <div class="ui container">
                     <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                     {% if app.user %}
@@ -77,15 +77,15 @@
                                     <a class="toc item">
                                         <i class="sidebar icon"></i>
                                     </a>
-                                    <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
+                                    <a class="{{ route == '' ? 'active '}}item" href="/trip">Home</a>
                                     {% if app.user %}
                                         <a class="item">Compte</a>
-                                        <div class="ui dropdown item">
-                                            sorties
+                                        <div class="ui dropdown item {{ route starts with 'trip' ? 'link-active' }}">
+                                            <span style="text-transform: capitalize">{{ route starts with 'trip' ? route : 'Sorties' }}</span>
                                             <i class="dropdown icon"></i>
                                             <div class="menu">
-                                                <a class="item">Organiser une sortie</a>
-                                                <a class="item">Rechercher une sortie</a>
+                                                <a class="item" href="/trip/add">Organiser une sortie</a>
+                                                <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                                             </div>
                                         </div>
                                         {% if is_granted('ROLE_ADMIN') %}
