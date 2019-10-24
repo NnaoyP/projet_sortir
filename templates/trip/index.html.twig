@@ -145,11 +145,11 @@
                             {% elseif trip.startDate|date('Y-m-d') > "now"|date('Y-m-d') %}
                                 <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
                             {% endif %}
-                        {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') %}
+                        {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') or trip.status.id == constant('App\\Entity\\TripStatus::FULL') %}
                             {% if app.user in trip.participants %}
-                                <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
-                            {% else %}
                                 <a class="ui right labeled icon negative button" href="/trip/rem-participant/{{ trip.id }}">Se désister<i class="user times icon"></i></a>
+                            {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') %}
+                                <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
                             {% endif %}
                         {% endif %}
                     </td>
