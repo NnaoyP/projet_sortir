@@ -137,10 +137,10 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("trip/cancel/{tripId}, name="trip_cancel")
+     * @Route("trip/cancel/{tripId}", name="trip_cancel")
      * @param Request $request
      */
     public function canceled(Request $request) {
-        $status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+        //$status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
     }
 }
