@@ -84,6 +84,8 @@ class TripController extends AbstractController
 
             $em->persist($trip);
             $em->flush();
+
+            return $this->redirectToRoute('trip');
         }
 
         return $this->render("trip/add.html.twig", [
@@ -94,6 +96,7 @@ class TripController extends AbstractController
 
     /**
      * @Route("/trip/add-participant/{tripId}", name="trip_add_participant")
+     * @method Participant getUser()
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse
@@ -101,13 +104,14 @@ class TripController extends AbstractController
      */
     public function addParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+
         if (sizeof($trip->getParticipants()) < $trip->getMaxRegistrationNumber()
-            and $trip->getParticipants()->contains($this->getUser())
-            and $trip->getDeadlineDate() >= new \DateTime()
+            and !$trip->getParticipants()->contains($this->getUser())
+            and new \DateTime() < $trip->getDeadlineDate()
             and ($trip->getStatus()->getId() == TripStatus::OPEN)) {
             $trip->addParticipant($this->getUser());
 
-            if ($trip->getParticipants() == $trip->getMaxRegistrationNumber()) {
+            if (sizeof($trip->getParticipants()) == $trip->getMaxRegistrationNumber()) {
                 $trip->setStatus($this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::FULL));
             }
 
@@ -126,9 +130,9 @@ class TripController extends AbstractController
      */
     public function removeParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
-        if (in_array($this->getUser(), $trip->getParticipants())
+        if ($trip->getParticipants()->contains($this->getUser())
             and $trip->getOrganizer() != $this->getUser()
-            and $trip->getStatus()->getId() == TripStatus::OPEN) {
+            and ($trip->getStatus()->getId() == TripStatus::OPEN or $trip->getStatus()->getId() == TripStatus::FULL)) {
             $trip->removeParticipant($this->getUser());
 
             if ( $trip->getStatus()->getId() == TripStatus::FULL) {
@@ -179,5 +183,19 @@ class TripController extends AbstractController
         if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
             $trip->setStatus($status);
         }
+    }
+
+    /**
+     * @Route('/trip/{tripId}/action, "trip_cancel_action")
+     */
+    public function publishAction() {
+
+    }
+
+    /**
+     * @Route('/trip/{tripId}/action, "trip_cancel_action")
+     */
+    public function cancelAction() {
+
     }
 }

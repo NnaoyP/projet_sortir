@@ -9,11 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TripStatus
 {
+    const CREATION = 1;
     const OPEN = 2;
-    const DONE = 5;
     const FULL = 3;
     const CLOSED = 4;
-    const CREATION = 1;
+    const DONE = 5;
     const CANCELED = 6;
 
     /**
