@@ -54,7 +54,7 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("/trip/add", name="trip_add")
+     * @Route("/trip/add/", name="trip_add")
      * @method Participant getUser()
      * @param Request $request
      * @param EntityManagerInterface $em
@@ -70,7 +70,8 @@ class TripController extends AbstractController
         // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
 
-        $status = $em->getRepository(TripStatus::class)->find(1);
+        $status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+
         $trip->setStatus($status);
         $trip->setParticipantArea($organizer->getParticipantArea());
         $trip->setOrganizer($organizer);
@@ -120,7 +121,6 @@ class TripController extends AbstractController
         // récupération du trip
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
 
-
         // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);
 
@@ -134,5 +134,13 @@ class TripController extends AbstractController
         return $this->render("trip/edit.html.twig", [
             'tripType' => $tripType->createView()
         ]);
+    }
+
+    /**
+     * @Route("trip/cancel/{tripId}, name="trip_cancel")
+     * @param Request $request
+     */
+    public function canceled(Request $request) {
+        $status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
     }
 }

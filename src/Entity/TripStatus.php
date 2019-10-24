@@ -9,6 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TripStatus
 {
+    const OPEN = 1;
+    const DONE = 2;
+    const FULL = 3;
+    const CLOSED = 4;
+    const CREATION = 5;
+    const CANCELED = 6;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
