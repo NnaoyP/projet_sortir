@@ -173,9 +173,10 @@ class TripController extends AbstractController
     /**
      * @Route("/trip/action/{tripId}/{action}", name="trip_actions")
      * @param Request $request
+     * @param EntityManagerInterface $em
      * @return RedirectResponse
      */
-    public function actions(Request $request) {
+    public function actions(Request $request,EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
 
         switch ($request->attributes->get('action')) {
@@ -184,6 +185,7 @@ class TripController extends AbstractController
                 $trip->setStatus($status);
                 break;
             case 'cancel' :
+
                 $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED);
                 if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
                     $trip->setStatus($status);
@@ -193,6 +195,9 @@ class TripController extends AbstractController
             default:
                 throw $this->createNotFoundException("L'url demandée n'est pas attribuée.");
         }
+
+        $em->persist($trip);
+        $em->flush();
 
         return $this->redirectToRoute('trip');
     }
