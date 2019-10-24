@@ -45,8 +45,6 @@ class TripController extends AbstractController
         $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->query);
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
-        dd($trips);
-
         return $this->render("trip/index.html.twig", [
             'trips' => $trips,
             'places' => $places

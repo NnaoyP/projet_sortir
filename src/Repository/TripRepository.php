@@ -47,8 +47,8 @@ class TripRepository extends ServiceEntityRepository
 
         // recherche par site
         if(!empty($args->get('place'))) {
-            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :placeId')
-                ->setParameter('placeId', $args->get('place'));
+            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :tripPlace')
+                ->setParameter('tripPlace', $args->get('place'));
         }
 
         // recherche par nom de sortie
@@ -58,17 +58,12 @@ class TripRepository extends ServiceEntityRepository
         }
 
         // recherche par date de sorties (après le)
-        if (!empty($args->get('beginDate'))) {
-            $queryBuilder->andWhere('t.startDate >= :value')
-                ->setParameter('value', $args->get('tripBeginDate'));
-        }
-/*
-        // recherche par date de sorties (avant le)
-        if (!empty($args->get('endDate'))) {
-            $queryBuilder->andWhere('t.startDate <= :value')
-                ->setParameter('value', $args->get('tripEndDate'));
+        if (!empty($args->get('startDate'))) {
+            $queryBuilder->andWhere('t.startDate >= :tripStartDate')
+                ->setParameter('tripStartDate', gmdate('Y-m-d h:i:s', strtotime($args->get('startDate'))));
         }
 
+/*
         // recherche dont la sortie est organisée par l'utilisteur
         if (!empty($args->get('isOrganizer'))) {
             $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.name = :value')
