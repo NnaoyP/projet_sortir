@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TripController extends AbstractController
 {
     /**
-     * @Route("/trip", name="trip_get", methods={"GET"})
+     * @Route("/trip", name="trip", methods={"GET"})
      * @return Response
      */
     public function searchTrip()
@@ -33,7 +33,7 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("/trip", name="trip_post", methods={"POST"})
+     * @Route("/trip/search", name="trip_search", methods={"GET"})
      * @param Request $request
      * @return Response
      */
@@ -42,7 +42,7 @@ class TripController extends AbstractController
         // récupération des sorties publiées
         //$trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
 
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->query);
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
         dd($trips);

@@ -40,16 +40,17 @@ class TripPlace
      */
     private $longitude;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Trip", mappedBy="places")
-     */
-    private $trips;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\City")
      * @ORM\JoinColumn(nullable=false)
      */
     private $city;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Trip", mappedBy="place")
+     */
+    private $trips;
 
     public function __construct()
     {
@@ -114,6 +115,19 @@ class TripPlace
         return $this;
     }
 
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Trip[]
      */
@@ -126,7 +140,7 @@ class TripPlace
     {
         if (!$this->trips->contains($trip)) {
             $this->trips[] = $trip;
-            $trip->setPlaces($this);
+            $trip->setPlace($this);
         }
 
         return $this;
@@ -137,22 +151,10 @@ class TripPlace
         if ($this->trips->contains($trip)) {
             $this->trips->removeElement($trip);
             // set the owning side to null (unless already changed)
-            if ($trip->getPlaces() === $this) {
-                $trip->setPlaces(null);
+            if ($trip->getPlace() === $this) {
+                $trip->setPlace(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
 
         return $this;
     }

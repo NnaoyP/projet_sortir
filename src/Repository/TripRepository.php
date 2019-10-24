@@ -47,22 +47,22 @@ class TripRepository extends ServiceEntityRepository
 
         // recherche par site
         if(!empty($args->get('place'))) {
-            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :value')
-                ->setParameter('value', $args->get('place'));
+            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :placeId')
+                ->setParameter('placeId', $args->get('place'));
         }
 
         // recherche par nom de sortie
         if(!empty($args->get('name'))) {
-            $queryBuilder->andWhere('t.name LIKE :value')
-                ->setParameter('value', ('%'.$args->get('name').'%'));
+            $queryBuilder->andWhere('t.name LIKE :tripName')
+                ->setParameter('tripName', ('%'.$args->get('name').'%'));
         }
-/*
+
         // recherche par date de sorties (après le)
         if (!empty($args->get('beginDate'))) {
             $queryBuilder->andWhere('t.startDate >= :value')
                 ->setParameter('value', $args->get('tripBeginDate'));
         }
-
+/*
         // recherche par date de sorties (avant le)
         if (!empty($args->get('endDate'))) {
             $queryBuilder->andWhere('t.startDate <= :value')

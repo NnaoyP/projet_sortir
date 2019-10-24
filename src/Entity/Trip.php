@@ -74,11 +74,6 @@ class Trip
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TripPlace", inversedBy="trips")
-     */
-    private $place;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Participant", inversedBy="organizedTrips")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank
@@ -89,6 +84,12 @@ class Trip
      * @ORM\ManyToMany(targetEntity="App\Entity\Participant", mappedBy="participatingTrips")
      */
     private $participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TripPlace", inversedBy="trips")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $place;
 
     public function __construct()
     {
@@ -200,18 +201,6 @@ class Trip
         return $this;
     }
 
-    public function getPlace(): ?TripPlace
-    {
-        return $this->place;
-    }
-
-    public function setPlace(?TripPlace $place): self
-    {
-        $this->place = $place;
-
-        return $this;
-    }
-
     public function getOrganizer(): ?Participant
     {
         return $this->organizer;
@@ -248,6 +237,18 @@ class Trip
             $this->participants->removeElement($participant);
             $participant->removeParticipatingTrip($this);
         }
+
+        return $this;
+    }
+
+    public function getPlace(): ?TripPlace
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?TripPlace $place): self
+    {
+        $this->place = $place;
 
         return $this;
     }
