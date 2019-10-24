@@ -9,8 +9,8 @@ use App\Entity\TripStatus;
 use App\Form\TripType;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -66,7 +66,6 @@ class TripController extends AbstractController
         // création de la sortie a mapper avec le formulaire
         $trip = new Trip();
 
-
         // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
 
@@ -96,19 +95,50 @@ class TripController extends AbstractController
     /**
      * @Route("/trip/add-participant/{tripId}", name="trip_add_participant")
      * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function addParticipant(Request $request) {
+    public function addParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
-        $trip->addParticipant($this->getUser());
+        if (sizeof($trip->getParticipants()) < $trip->getMaxRegistrationNumber()
+            and $trip->getParticipants()->contains($this->getUser())
+            and $trip->getDeadlineDate() >= new \DateTime()
+            and ($trip->getStatus()->getId() == TripStatus::OPEN)) {
+            $trip->addParticipant($this->getUser());
+
+            if ($trip->getParticipants() == $trip->getMaxRegistrationNumber()) {
+                $trip->setStatus($this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::FULL));
+            }
+
+            $em->persist($trip);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('trip');
     }
 
     /**
      * @Route("/trip/rem-participant/{tripId}", name ="trip_remove_participant")
      * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
      */
-    public function removeParticipant(Request $request) {
+    public function removeParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
-        $trip->removeParticipant($this->getUser());
+        if (in_array($this->getUser(), $trip->getParticipants())
+            and $trip->getOrganizer() != $this->getUser()
+            and $trip->getStatus()->getId() == TripStatus::OPEN) {
+            $trip->removeParticipant($this->getUser());
+
+            if ( $trip->getStatus()->getId() == TripStatus::FULL) {
+                $trip->setStatus($this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::OPEN));
+            }
+
+            $em->persist($trip);
+            $em->flush();
+        }
+        return $this->redirectToRoute('trip');
     }
 
     /**
@@ -139,8 +169,15 @@ class TripController extends AbstractController
     /**
      * @Route("trip/cancel/{tripId}", name="trip_cancel")
      * @param Request $request
+     * @param EntityManagerInterface $em
      */
-    public function canceled(Request $request) {
-        //$status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+    public function cancel(Request $request, EntityManagerInterface $em) {
+        $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED);
+
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+
+        if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
+            $trip->setStatus($status);
+        }
     }
 }
