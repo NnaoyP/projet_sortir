@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Sorties{% endblock %}
-{% block pageTitle %}Liste et recherche des sorties{% endblock %}
+{% block pageTitle %}Liste des sorties{% endblock %}
 
 {% block main %}
     <form class="ui form" method="post">
@@ -81,4 +81,45 @@
             </button>
         </div>
     </form>
+    <div class="ui horizontal divider">
+        Liste
+    </div>
+    <div>
+        <table class="ui celled padded table">
+            <thead>
+                <tr>
+                    <th class="single line">Nom</th>
+                    <th>Dates</th>
+                    <th>Inscrits</th>
+                    <th>Status</th>
+                    <th>Organisateur</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for trip in trips %}
+                <tr id="trip-{{ trip.id }}">
+                    <td>
+                        <b class="ui center aligned header">{{ trip.name }}</b>
+                    </td>
+                    <td class="single line">
+                        11/09/2001
+                    </td>
+                    <td>
+                        3/10
+                    </td>
+                    <td class="right aligned">
+                        status
+                    </td>
+                    <td>
+                        MOI
+                    </td>
+                    <td>
+                        <a class="ui button" href="/trip/{{ trip.id }}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    <div>
 {% endblock %}
