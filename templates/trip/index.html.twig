@@ -138,18 +138,20 @@
                         {% if trip.status.id != constant('App\\Entity\\TripStatus::CREATION') %}
                             <a class="ui right labeled icon secondary button" href="/trip/details/{{ trip.id }}">Afficher<i class="eye icon"></i></a>
                         {% endif %}
-                        {% if app.user == trip.organizer %}
-                            {% if trip.status.id == constant('App\\Entity\\TripStatus::CREATION') %}
-                                <a class="ui right labeled icon button" href="/trip/edit/{{ trip.id }}">Modifier<i class="edit icon"></i></a>
-                                <a class="ui right labeled icon primary button" href="/trip/action/{{ trip.id }}/publish">Publier<i class="save icon"></i></a>
-                            {% elseif trip.startDate|date('Y-m-d') > "now"|date('Y-m-d') %}
-                                <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
-                            {% endif %}
-                        {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') or trip.status.id == constant('App\\Entity\\TripStatus::FULL') %}
-                            {% if app.user in trip.participants %}
-                                <a class="ui right labeled icon negative button" href="/trip/rem-participant/{{ trip.id }}">Se désister<i class="user times icon"></i></a>
-                            {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') %}
-                                <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
+                        {% if trip.status.id != constant('App\\Entity\\TripStatus::CLOSED') %}
+                            {% if app.user == trip.organizer %}
+                                {% if trip.status.id == constant('App\\Entity\\TripStatus::CREATION') %}
+                                    <a class="ui right labeled icon button" href="/trip/edit/{{ trip.id }}">Modifier<i class="edit icon"></i></a>
+                                    <a class="ui right labeled icon primary button" href="/trip/action/{{ trip.id }}/publish">Publier<i class="save icon"></i></a>
+                                {% elseif trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and trip.startDate|date('Y-m-d') > "now"|date('Y-m-d') %}
+                                    <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
+                                {% endif %}
+                            {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') or trip.status.id == constant('App\\Entity\\TripStatus::FULL') %}
+                                {% if app.user in trip.participants %}
+                                    <a class="ui right labeled icon negative button" href="/trip/rem-participant/{{ trip.id }}">Se désister<i class="user times icon"></i></a>
+                                {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') %}
+                                    <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </td>
