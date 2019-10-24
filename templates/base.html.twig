@@ -37,8 +37,8 @@
                     <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                     {% if app.user %}
                         <a class="item">Compte</a>
-                        <a class="item">Organiser une sortie</a>
-                        <a class="item">Rechercher une sortie</a>
+                        <a class="item" href="/trip/add">Organiser une sortie</a>
+                        <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
                         {% endif %}
@@ -57,8 +57,8 @@
                 <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                 {% if app.user %}
                     <a class="item">Compte</a>
-                    <a class="item">Organiser une sortie</a>
-                    <a class="item">Rechercher une sortie</a>
+                    <a class="item" href="/trip/add">Organiser une sortie</a>
+                    <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
                     {% endif %}
