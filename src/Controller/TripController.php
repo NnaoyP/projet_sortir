@@ -171,31 +171,42 @@ class TripController extends AbstractController
     }
 
     /**
-     * @Route("trip/cancel/{tripId}", name="trip_cancel")
+     * @Route("/trip/action/{tripId}/{action}", name="trip_actions")
      * @param Request $request
-     * @param EntityManagerInterface $em
+     * @return RedirectResponse
      */
-    public function cancel(Request $request, EntityManagerInterface $em) {
-        $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED);
-
+    public function actions(Request $request) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
 
-        if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
-            $trip->setStatus($status);
+        switch ($request->attributes->get('action')) {
+            case 'publish' :
+                $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+                $trip->setStatus($status);
+                break;
+            case 'cancel' :
+                $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED);
+                if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
+                    $trip->setStatus($status);
+                }
+                break;
+
+            default:
+                throw $this->createNotFoundException("L'url demandée n'est pas attribuée.");
         }
+
+        return $this->redirectToRoute('trip');
     }
 
     /**
-     * @Route('/trip/{tripId}/action, "trip_cancel_action")
+     * @Route("trip/details/{tripId}", name="trip_details")
+     * @param Request $request
+     * @return Response
      */
-    public function publishAction() {
+    public function details(Request $request) {
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
 
-    }
-
-    /**
-     * @Route('/trip/{tripId}/action, "trip_cancel_action")
-     */
-    public function cancelAction() {
-
+        return $this->render("trip/details.html.twig", [
+            'trip' => $trip
+        ]);
     }
 }
