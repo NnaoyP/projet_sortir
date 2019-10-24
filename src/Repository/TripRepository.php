@@ -63,19 +63,24 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('tripStartDate', gmdate('Y-m-d h:i:s', strtotime($args->get('startDate'))));
         }
 
-/*
+        // recherche par date de sorties (avant le)
+        if (!empty($args->get('endDate'))) {
+            $queryBuilder->andWhere('t.startDate <= :tripEndDate')
+                ->setParameter('tripEndDate', gmdate('Y-m-d h:i:s', strtotime($args->get('endDate'))));
+        }
+
         // recherche dont la sortie est organisée par l'utilisteur
         if (!empty($args->get('isOrganizer'))) {
-            $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.name = :value')
-                ->setParameter('value', $args->get('isOrganizer'));
+            $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.email = :userEmail')
+                ->setParameter('userEmail', $args->get('email'));
         }
 
         // recherche dont l'utilisateur est un participant
         if (!empty($args->get('isParticipantOn'))) {
-            $queryBuilder->innerJoin('t.participants', 'o', join::WITH, 'o.name = :value')
-                ->setParameter('value', $args->get('isRegistered'));
+            $queryBuilder->innerJoin('t.participants', 'o', join::WITH, 'o.email = :userEmail')
+                ->setParameter('userEmail', $args->get('email'));
         }
-*/
+
 
 
         return $queryBuilder->getQuery()->getResult();

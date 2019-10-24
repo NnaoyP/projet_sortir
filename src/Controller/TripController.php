@@ -40,9 +40,11 @@ class TripController extends AbstractController
     public function searchTripWithFilter(Request $request)
     {
         // récupération des sorties publiées
-        //$trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->request);
 
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($request->query);
+        $parameterBag = $request->query;
+        $parameterBag->add(['email' =>  $this->getUser()->getEmail()]); //ajout du mail de l'utilisateur pour la recherche de sorties dont je suis l'organisateur
+
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($parameterBag);
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
         return $this->render("trip/index.html.twig", [
@@ -67,7 +69,6 @@ class TripController extends AbstractController
 
         // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
-        $places = $em->getRepository(TripPlace::class)->findAll();
 
         $status = $em->getRepository(TripStatus::class)->find(1);
         $trip->setStatus($status);
@@ -87,26 +88,51 @@ class TripController extends AbstractController
 
         return $this->render("trip/add.html.twig", [
             'tripType' => $tripType->createView(),
-            'tripOrganizer' => $organizer,
-            'tripPlaces' => $places
+            'tripOrganizer' => $organizer
         ]);
     }
 
     /**
-     * @Route("/trip/registerParticipant/{id}", name="trip_register_participant")
-     * @param $tripId
+     * @Route("/trip/add-participant/{tripId}", name="trip_add_participant")
+     * @param Request $request
      */
-    public function addParticipant($tripId) {
-        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($tripId);
+    public function addParticipant(Request $request) {
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
         $trip->addParticipant($this->getUser());
     }
 
     /**
-     * @Route("/trip/removeParticipant/{id}", name ="remove_register_participant")
-     * @param $tripId
+     * @Route("/trip/rem-participant/{tripId}", name ="trip_remove_participant")
+     * @param Request $request
      */
-    public function removeParticipant($tripId) {
-        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($tripId);
+    public function removeParticipant(Request $request) {
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
         $trip->removeParticipant($this->getUser());
+    }
+
+    /**
+     * @Route("/trip/edit/{tripId}", name="trip_edit")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function edit(Request $request, EntityManagerInterface $em) {
+        // récupération du trip
+        $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+
+
+        // création du formulaire et association de la sortie au formulaire
+        $tripType = $this->createForm(TripType::class, $trip);
+
+        $tripType->handleRequest($request);
+        if ($tripType->isSubmitted() && $tripType->isValid()) {
+
+            $em->persist($trip);
+            $em->flush();
+        }
+
+        return $this->render("trip/edit.html.twig", [
+            'tripType' => $tripType->createView()
+        ]);
     }
 }
