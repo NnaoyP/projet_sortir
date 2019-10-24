@@ -9,7 +9,7 @@
             <div class="ui grid">
                 <div class="ten wide column">
                     <div class="field">
-                        <label>Site</label>
+                        <label>Sur le site de</label>
                         <select class="ui search dropdown" name="place">
                             <option value="">Tous</option>
                             {% for place in places %}
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="field">
-                        <label>Recherche dans le nom :</label>
+                        <label>Recherche dans le nom</label>
                         <div class="ui right icon input">
                             <i class="tags icon"></i>
                             <input type="text" placeholder="ex: 'Jeu de Rôle'" name="name"/>
@@ -27,10 +27,10 @@
                     </div>
 
                     <div class="field">
-                        <label>Date de la sortie</label>
+                        <label>Sortie organisée entre</label>
                         <div class="two fields">
-                            <div class="ui calendar date-time field" ">
-                                <div class="ui input left icon"  >
+                            <div class="ui calendar date-time field">
+                                <div class="ui input left icon">
                                     <i class="calendar icon"></i>
                                     <input type="text" placeholder="Date de début"  name="startDate"/>
                                 </div>
@@ -102,20 +102,48 @@
                     <td>
                         <b class="ui center aligned header">{{ trip.name }}</b>
                     </td>
-                    <td class="single line">
-                        11/09/2001
+                    <td class="ui list">
+                        <div class="item">
+                            <i class="calendar alternate outline icon"></i>
+                            <div class="content">
+                                <b>Sortie</b> pour le {{ trip.startDate|date('d/m/Y') }} à {{ trip.startDate|date('H:i') }}
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="calendar times outline icon"></i>
+                            <div class="content">
+                                <b>Fin des inscriptions</b> le {{ trip.deadLineDate|date('d/m/Y') }}
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        3/10
-                    </td>
-                    <td class="right aligned">
-                        status
+                        {{ trip.participants|length }}/{{ trip.maxRegistrationNumber }}
                     </td>
                     <td>
-                        MOI
+                        {{ trip.status.name }}
                     </td>
                     <td>
-                        <a class="ui button" href="/trip/{{ trip.id }}">Edit</a>
+                        {% if app.user == trip.organizer %}
+                            Moi
+                        {% else %}
+                            {{ app.user.firstname }}&nbsp;{{ app.user.lastname }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.user == trip.organizer %}
+                            {% if trip.status.id == 5 %}
+                                <a class="ui right labeled icon button" href="/trip/edit/{{ trip.id }}">Modifier<i class="edit icon"></i></a>
+                                <a class="ui right labeled icon primary button" href="/trip/edit/{{ trip.id }}">Publier<i class="save icon"></i></a>
+                            {% elseif trip.startDate|date('Y-m-d') > "now"|date('Y-m-d') %}
+                                <a class="ui right labeled icon negative button" href="/trip/edit/{{ trip.id }}">Annuler<i class="times circle icon"></i></a>
+                            {% endif %}
+                        {% elseif trip.status.id == 1 %}
+                            {% if app.user in trip.participants %}
+                                <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
+                            {% else %}
+                                <a class="ui right labeled icon negative button" href="/trip/rem-participant/{{ trip.id }}">Se désister<i class="user times icon"></i></a>
+                            {% endif %}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
