@@ -55,37 +55,45 @@ class TripRepository extends ServiceEntityRepository
         if(!empty($args->get('name'))) {
             $queryBuilder->andWhere('t.name LIKE :tripName')
                 ->setParameter('tripName', ('%'.$args->get('name').'%'));
+            //$queryBuilder->andWhere('MATCH (\'test \' \'pour\') AGAINST(t.name)')
         }
 
         // recherche par date de sorties (après le)
         if (!empty($args->get('startDate'))) {
             $queryBuilder->andWhere('t.startDate >= :tripStartDate')
-                ->setParameter('tripStartDate', gmdate('Y-m-d h:i:s', strtotime($args->get('startDate'))));
+                ->setParameter('tripStartDate', gmdate('Y-m-d H:i:s', strtotime($args->get('startDate'))));
         }
 
         // recherche par date de sorties (avant le)
         if (!empty($args->get('endDate'))) {
             $queryBuilder->andWhere('t.startDate <= :tripEndDate')
-                ->setParameter('tripEndDate', gmdate('Y-m-d h:i:s', strtotime($args->get('endDate'))));
+                ->setParameter('tripEndDate', gmdate('Y-m-d H:i:s', strtotime($args->get('endDate'))));
         }
 
         // recherche dont la sortie est organisée par l'utilisteur
         if (!empty($args->get('isOrganizer'))) {
-            $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.email = :userEmail')
-                ->setParameter('userEmail', $args->get('email'));
+            $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.id = :userId')
+                ->setParameter('userId', $args->get('userId'));
         }
 
         // recherche dont l'utilisateur est un participant
         if (!empty($args->get('isParticipantOn'))) {
-            $queryBuilder->innerJoin('t.participants', 'o', join::WITH, 'o.email = :userEmail')
-                ->setParameter('userEmail', $args->get('email'));
+            $queryBuilder->andWhere(':userId MEMBER OF t.participants')
+                ->setParameter('userId', $args->get('userId'));
         }
 
         // rechercher dont l'utilisateur ne participe pas
         if (!empty($args->get('isParticipantOff'))) {
-            $queryBuilder->where(':userId NOT MEMBER OF t.participants')
+            $queryBuilder->andWhere(':userId NOT MEMBER OF t.participants')
                 ->setParameter('userId', $args->get('userId'));
         }
+
+        // rechercher les sorties finies
+        if (!empty($args->get('isDone'))) {
+            $queryBuilder->andWhere('t.status = :doneStatus')
+                ->setParameter('doneStatus', TripStatus::DONE);
+        }
+
 
         return $queryBuilder->getQuery()->getResult();
     }
