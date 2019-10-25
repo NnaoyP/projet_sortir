@@ -43,7 +43,8 @@ class TripController extends AbstractController
 
         $parameterBag = $request->query;
         $parameterBag->add(['email' =>  $this->getUser()->getEmail()]); //ajout du mail de l'utilisateur pour la recherche de sorties dont je suis l'organisateur
-
+        $parameterBag->add(['userId' => $this->getUser()->getId()]);
+        
         $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($parameterBag);
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 

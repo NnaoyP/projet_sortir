@@ -81,7 +81,12 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('userEmail', $args->get('email'));
         }
 
-
+        // rechercher dont l'utilisateur ne participe pas
+        if (!empty($args->get('isParticipantOff'))) {
+            $queryBuilder->innerJoin('t.participants', 'o')
+                ->andWhere('o.id <> :userId')
+                ->setParameter('userId', $args->get('userId'));
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
