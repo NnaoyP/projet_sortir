@@ -157,7 +157,7 @@
 
                             {% endif %}
 
-                            {% if is_granted('ROLE_ADMIN') and trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and app.user == trip.organizer %}
+                            {% if is_granted('ROLE_ADMIN') and trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and app.user != trip.organizer %}
                                 <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
                             {% endif %}
 

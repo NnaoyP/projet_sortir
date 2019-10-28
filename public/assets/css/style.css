@@ -68,6 +68,28 @@ body .grid {
     border-bottom: black 2px solid !important;
 }
 
+.underlined.field {
+    border-bottom: rgba(0, 0, 0, 0.4) 1px solid;
+}
+
+.form-information {
+    padding: 5px 0;
+}
+
+.form-information > p {
+    font-size: large !important;
+}
+
+.empty-information {
+    color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.error-label > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
 /*
     SEMANTIC UI CLASSES
 */

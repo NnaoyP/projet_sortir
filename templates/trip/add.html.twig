@@ -1,17 +1,154 @@
 {% extends 'base.html.twig' %}
 
+
+{% block title %}sorties - création{% endblock %}
+{% block pageTitle %}Créer une sortie{% endblock %}
+
 {% block main %}
+    {{ form_start(tripType, { 'attr': {'class': 'ui form grid container'}}) }}
 
-    {{ form_start(tripType) }}
-    <button class="btn">Publier</button>
+        <div class="ui eight wide column">
+            <div class="inline field">
+                <label for="trip-name">Nom de la sortie</label>
+                <div class="ui input">
+                    {{ form_widget(tripType.name, { 'attr': {'id': 'trip-name'} }) }}
+                </div>
+                {% if form_errors(tripType.name) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.name) }}
+                    </div>
+                {% endif %}
+            </div>
 
+            <div class="ui calendar date-time inline field">
+                <label for="date-trip">Date de la sortie</label>
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    {{ form_widget(tripType.startDate, { 'attr': {'id': 'date-trip'} }) }}
+                </div>
+                {% if form_errors(tripType.startDate) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.startDate) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="ui calendar date-time inline field">
+                <label for="date-subscribing">Date limite d'inscription</label>
+                <div class="ui input left icon">
+                    <i class="calendar icon"></i>
+                    {{ form_widget(tripType.deadlineDate, { 'attr': {'id': 'date-subscribing'} }) }}
+                </div>
+                {% if form_errors(tripType.deadlineDate) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.deadlineDate) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="inline field">
+                <label for="nb-places">Nombre de places</label>
+                <div class="ui input">
+                    {{ form_widget(tripType.maxRegistrationNumber, { 'attr': {'id': 'nb-places'} }) }}
+                </div>
+                {% if form_errors(tripType.maxRegistrationNumber) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.maxRegistrationNumber) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="inline field">
+                <label for="trip-duration">Durée</label>
+                {{ form_widget(tripType.duration, { 'attr': {'id': 'trip-duration'} }) }}
+
+                {% if form_errors(tripType.duration) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.duration) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="inline field">
+                <label for="trip-desc">Informations</label>
+                {{ form_widget(tripType.description, { 'attr': {'id': 'trip-desc'} }) }}
+
+                {% if form_errors(tripType.description) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.description) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="ui eight wide column">
+            <div class="inline underlined field form-information">
+                <label>ville organisatrice :</label>
+                <p>
+                    {{ tripOrganizer.getParticipantArea().getName() }}
+                </p>
+            </div>
+            <div class="inline field">
+                <label for="trip-place">Lieu</label>
+                {{ form_widget(tripType.place, {'attr': {
+                    'class': 'ui search dropdown',
+                    'id': 'trip-place',
+                    'onchange': 'placeSelect(this.value)'}
+                }) }}
+                {% if form_errors(tripType.place) %}
+                    <div class="ui left pointing red basic label error-label">
+                        {{ form_errors(tripType.place) }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="inline field form-information">
+                <label>Ville :</label>
+                <p class="empty-information" id="selected-city">aucun</p>
+            </div>
+            <div class="inline field form-information">
+                <label>Adresse :</label>
+                <p class="empty-information" id="selected-address">aucun</p>
+            </div>
+        </div>
+        <div class="ui sixteen wide column">
+            <button class="ui button">Publier</button>
+        </div>
     {{ form_end(tripType) }}
-
-    Ville organisatrice : {{ tripOrganizer.getParticipantArea().getName() }}
-
 {% endblock %}
 
-{% block title %}
+{% block javascripts %}
+    <script>
+        const places = [];
 
+        {% for place in places %}
+            places.push({
+                id: {{ place.id }},
+                city: '{{ place.city.name }}',
+                zipCode: '{{ place.city.zipCode }}',
+                address: '{{ place.fullName }}'
+            });
+        {% endfor %}
+
+        function placeSelect(id) {
+            const selectedPlace = places.find(element => {
+                return element.id === Number(id);
+            });
+
+            const cityEl = document.getElementById('selected-city');
+            const addressEl = document.getElementById('selected-address');
+
+            if (selectedPlace) {
+                const city = `${selectedPlace.city} (${selectedPlace.zipCode})`;
+
+                cityEl.innerText = city;
+                cityEl.classList.remove('empty-information');
+                addressEl.innerText = selectedPlace.address;
+                addressEl.classList.remove('empty-information');
+            } else {
+                cityEl.innerText = 'aucun';
+                cityEl.classList.add('empty-information');
+                addressEl.innerText = 'aucun';
+                addressEl.classList.add('empty-information');
+            }
+        }
+    </script>
 {% endblock %}
-

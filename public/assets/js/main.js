@@ -40,6 +40,13 @@ $(document).ready(function() {
         clearable: true
     });
     $('.ui.checkbox').checkbox();
-    $('.date-time').calendar({ampm: false});
+    $('.date-time').calendar({ampm: false, formatter: {
+        date: (date, settings) => {
+            const month = (date.getUTCMonth() + 1    < 10)? '0' + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1);
+            const day = (date.getUTCDate() < 10)? '0' + date.getUTCDate() : date.getUTCDate();
+
+            return `${date.getUTCFullYear()}-${month}-${day}`;
+        }}
+    });
 });
 
