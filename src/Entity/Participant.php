@@ -73,6 +73,11 @@ class Participant implements UserInterface
      */
     private $participatingTrips;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageUrl;
+
     public function __construct()
     {
         $this->isActive = 1;
@@ -272,6 +277,18 @@ class Participant implements UserInterface
         if ($this->participatingTrips->contains($participatingTrip)) {
             $this->participatingTrips->removeElement($participatingTrip);
         }
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }

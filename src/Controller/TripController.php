@@ -59,11 +59,10 @@ class TripController extends AbstractController
      * @method Participant getUser()
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param \Swift_Mailer $mailer
      * @return Response
-     * @throws Exception
      */
-    public function addTrip(Request $request,
-                            EntityManagerInterface $em) {
+    public function addTrip(Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
         // création de la sortie a mapper avec le formulaire
         $trip = new Trip();
 
@@ -86,6 +85,22 @@ class TripController extends AbstractController
 
             $em->persist($trip);
             $em->flush();
+
+            // envoie d'un mail à tous les utilisateurs pour les prevenir de l'existence de la nouvelle sortie
+            $message = (new \Swift_Message('Une nouvelle sortie ENI est disponible!'))
+                ->setFrom('projet.eni@gmail.com')
+                ->setTo('thomas.rodriguez2701@gmail.com')
+                ->setBody(
+                    $this->renderView(
+                        // templates/emails/registration.html.twig
+                        'emails/registration.html.twig',
+                        ['name' => $trip->getName()]
+                    ),
+                    'text/html'
+                )
+            ;
+
+            $mailer->send($message);
 
             return $this->redirectToRoute('trip');
         }

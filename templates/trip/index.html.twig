@@ -144,7 +144,7 @@
                                 {% if trip.status.id == constant('App\\Entity\\TripStatus::CREATION') %}
                                     <a class="ui right labeled icon button" href="/trip/edit/{{ trip.id }}">Modifier<i class="edit icon"></i></a>
                                     <a class="ui right labeled icon primary button" href="/trip/action/{{ trip.id }}/publish">Publier<i class="save icon"></i></a>
-                                {% elseif trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and trip.startDate|date('Y-m-d-H-i') > date('Europe/Paris') | date('Y-m-d-H-i') %}
+                                {% elseif trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and trip.startDate|date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris') %}
                                     <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
                                 {% endif %}
 
