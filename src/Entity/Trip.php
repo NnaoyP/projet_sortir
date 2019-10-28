@@ -94,8 +94,12 @@ class Trip
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->setStartDate(new \DateTime());
-        $this->setDeadlineDate(new \DateTime());
+        $this->setStartDate(
+            (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'))
+        );
+        $this->setDeadlineDate(
+            (new \DateTime)->setTimezone( new \DateTimeZone('Europe/Paris'))
+        );
         $this->setDuration(15);
         $this->setMaxRegistrationNumber(2);
     }

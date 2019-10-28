@@ -107,10 +107,11 @@ class TripController extends AbstractController
      */
     public function addParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+        $today = (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'));
 
         if (sizeof($trip->getParticipants()) < $trip->getMaxRegistrationNumber()
             and !$trip->getParticipants()->contains($this->getUser())
-            and new \DateTime() < $trip->getDeadlineDate()
+            and $today < $trip->getDeadlineDate()
             and ($trip->getStatus()->getId() == TripStatus::OPEN)) {
             $trip->addParticipant($this->getUser());
 
@@ -130,12 +131,16 @@ class TripController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse
+     * @throws Exception
      */
     public function removeParticipant(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+        $today = (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'));
+
         if ($trip->getParticipants()->contains($this->getUser())
             and $trip->getOrganizer() != $this->getUser()
-            and ($trip->getStatus()->getId() == TripStatus::OPEN or $trip->getStatus()->getId() == TripStatus::FULL)) {
+            and ($trip->getStatus()->getId() == TripStatus::OPEN or $trip->getStatus()->getId() == TripStatus::FULL)
+            and $today < $trip->getDeadlineDate()) {
             $trip->removeParticipant($this->getUser());
 
             if ( $trip->getStatus()->getId() == TripStatus::FULL) {

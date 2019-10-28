@@ -94,7 +94,18 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('doneStatus', TripStatus::DONE);
         }
 
+        // ne pas prendre les archivés
+        $queryBuilder->andWhere('t.status <> :closedStatus')
+            ->setParameter('closedStatus', TripStatus::CLOSED);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findAllNotClosed() {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.status <> :closedStatus')
+            ->setParameter('closedStatus', TripStatus::CLOSED)
+            ->getQuery()
+            ->getResult();
     }
 }

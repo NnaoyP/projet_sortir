@@ -44,7 +44,9 @@ class ProfileController extends AbstractController
         }
 
         $participantForm = $this->createForm(ParticipantType::class, $participant);
+        $participantForm->remove('plainPassword');
         $participantForm->handleRequest($request);
+
         if ($participantForm->isSubmitted() && $participantForm->isValid()) {
             $em->persist($participant);
             $em->flush();
