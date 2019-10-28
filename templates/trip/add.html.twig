@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-
-{% block title %}sorties - création{% endblock %}
-{% block pageTitle %}Créer une sortie{% endblock %}
+{% set route = app.request.attributes.get('_route') %}
+{% block title %} {{ route starts with 'trip_edit' ? "sorties - edition" : "sorties - création" }}{% endblock %}
+{% block pageTitle %} {{ route starts with 'trip_edit' ? "Modifier une sortie" : "Créer une sortie" }}{% endblock %}
 
 {% block main %}
     {{ form_start(tripType, { 'attr': {'class': 'ui form grid container'}}) }}
@@ -91,7 +91,7 @@
                 <label for="trip-place">Lieu</label>
                 {{ form_widget(tripType.place, {'attr': {
                     'class': 'ui search dropdown',
-                    'id': 'trip-place',
+                    'id': 'trip_place',
                     'onchange': 'placeSelect(this.value)'}
                 }) }}
                 {% if form_errors(tripType.place) %}
@@ -109,8 +109,14 @@
                 <p class="empty-information" id="selected-address">aucun</p>
             </div>
         </div>
-        <div class="ui sixteen wide column">
-            <button class="ui button">Publier</button>
+        <div class="ui sixteen wide column center aligned">
+            {% if route starts with 'trip_add' or (tripStatus and tripStatus.id == constant('App\\Entity\\TripStatus::CREATION'))  %}
+                <button class="ui right labeled icon green button" name="publish">Publier <i class="ui copy icon"></i></button>
+            {% endif %}
+            <button class="ui right labeled icon blue button" name="save">Enregistrer <i class="ui save icon"></i> </button>
+            {% if route starts with 'trip_add' %}
+                <a class="ui right labeled icon negative button" href="/trip">Annuler<i class="ui times icon"></i></a>
+            {% endif %}
         </div>
     {{ form_end(tripType) }}
 {% endblock %}
@@ -149,6 +155,12 @@
                 addressEl.innerText = 'aucun';
                 addressEl.classList.add('empty-information');
             }
+        }
+
+        let isEdit = {{ route starts with 'trip_edit' ? 'true' : 'false' }};
+
+        if (isEdit) {
+            placeSelect(document.getElementById('trip_place').value);
         }
     </script>
 {% endblock %}

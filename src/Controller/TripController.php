@@ -180,6 +180,10 @@ class TripController extends AbstractController
 
         // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);
+        $places = $em->getRepository(TripPlace::class)->findAll();
+
+        // récupération des données non séléctionnables par l'utilisateur
+        $organizer = $this->getUser();
 
         $tripType->handleRequest($request);
         if ($tripType->isSubmitted() && $tripType->isValid()) {
@@ -188,8 +192,11 @@ class TripController extends AbstractController
             $em->flush();
         }
 
-        return $this->render("trip/edit.html.twig", [
-            'tripType' => $tripType->createView()
+        return $this->render("trip/add.html.twig", [
+            'tripType' => $tripType->createView(),
+            'tripOrganizer' => $organizer,
+            'places' => $places,
+            'tripStatus' => $trip->getStatus()
         ]);
     }
 
