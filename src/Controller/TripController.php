@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\CustomServices\EmailSender;
 use App\Entity\Participant;
 use App\Entity\Trip;
 use App\Entity\TripPlace;
@@ -86,21 +87,20 @@ class TripController extends AbstractController
             $em->persist($trip);
             $em->flush();
 
-            // envoie d'un mail à tous les utilisateurs pour les prevenir de l'existence de la nouvelle sortie
-            $message = (new \Swift_Message('Une nouvelle sortie ENI est disponible!'))
-                ->setFrom('projet.eni@gmail.com')
-                ->setTo('thomas.rodriguez2701@gmail.com')
-                ->setBody(
-                    $this->renderView(
-                        // templates/emails/registration.html.twig
-                        'emails/registration.html.twig',
-                        ['name' => $trip->getName()]
-                    ),
-                    'text/html'
-                )
-            ;
+            $usersEmail = $this->getDoctrine()->getRepository(Participant::class)->findAllEmail();
 
-            $mailer->send($message);
+            foreach ($usersEmail as $userEmail) {
+                $message = new \Swift_Message('Une nouvelle sortie ENI est disponible!');
+                $message->setFrom('eni.sortir@gmail.com');
+                $message->setTo($userEmail['email']);
+                $message->setBody($this->renderView('emails/registration.html.twig', ['name' => $trip->getName(),'text/html']));
+
+                try {
+                    $mailer->send($message);
+                } catch (Exception $e){
+                    //le mail ne s'est pas envoyé, créer un log
+                }
+            }
 
             return $this->redirectToRoute('trip');
         }
@@ -117,10 +117,11 @@ class TripController extends AbstractController
      * @method Participant getUser()
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param \Swift_Mailer $mailer
      * @return RedirectResponse
      * @throws Exception
      */
-    public function addParticipant(Request $request, EntityManagerInterface $em) {
+    public function addParticipant(Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
         $today = (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'));
 
@@ -136,6 +137,19 @@ class TripController extends AbstractController
 
             $em->persist($trip);
             $em->flush();
+
+            $message = new \Swift_Message('Une nouvelle sortie ENI est disponible!');
+            $message->setFrom('eni.sortir@gmail.com');
+            $message->setTo($trip->getOrganizer()->getEmail());
+            $message->setBody($this->renderView('emails/add_participant.html.twig', ['tripName' => $trip->getName(),'text/html']));
+
+            try {
+                $mailer->send($message);
+                dump($mailer);
+                die();
+            } catch (Exception $e){
+                //le mail ne s'est pas envoyé, créer un log
+            }
         }
 
         return $this->redirectToRoute('trip');
@@ -145,10 +159,11 @@ class TripController extends AbstractController
      * @Route("/trip/rem-participant/{tripId}", name ="trip_remove_participant")
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param \Swift_Mailer $mailer
      * @return RedirectResponse
      * @throws Exception
      */
-    public function removeParticipant(Request $request, EntityManagerInterface $em) {
+    public function removeParticipant(Request $request, EntityManagerInterface $em, \Swift_Mailer $mailer) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
         $today = (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'));
 
@@ -164,6 +179,19 @@ class TripController extends AbstractController
 
             $em->persist($trip);
             $em->flush();
+
+            $message = new \Swift_Message('Une nouvelle sortie ENI est disponible!');
+            $message->setFrom('eni.sortir@gmail.com');
+            $message->setTo($trip->getOrganizer()->getEmail());
+            $message->setBody($this->renderView('emails/remove_participant.html.twig', ['tripName' => $trip->getName(),'text/html']));
+
+            try {
+                $mailer->send($message);
+            } catch (Exception $e){
+                //le mail ne s'est pas envoyé, créer un log
+            }
+
+
         }
         return $this->redirectToRoute('trip');
     }

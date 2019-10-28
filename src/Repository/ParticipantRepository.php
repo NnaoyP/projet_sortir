@@ -19,6 +19,14 @@ class ParticipantRepository extends ServiceEntityRepository
         parent::__construct($registry, Participant::class);
     }
 
+    public function findAllEmail() {
+        return $this->createQueryBuilder('p')
+            ->select('p.email')
+            ->andWhere('p.isActive = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Participant[] Returns an array of Participant objects
     //  */
