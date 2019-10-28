@@ -145,8 +145,6 @@ class TripController extends AbstractController
 
             try {
                 $mailer->send($message);
-                dump($mailer);
-                die();
             } catch (Exception $e){
                 //le mail ne s'est pas envoyé, créer un log
             }
