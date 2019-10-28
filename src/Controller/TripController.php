@@ -23,7 +23,7 @@ class TripController extends AbstractController
      */
     public function searchTrip()
     {
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAll();
+        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAllNotClosed();
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
         return $this->render("trip/index.html.twig", [
@@ -71,6 +71,7 @@ class TripController extends AbstractController
         $organizer = $this->getUser();
 
         $status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+        $places = $em->getRepository(TripPlace::class)->findAll();
 
         $trip->setStatus($status);
         $trip->setParticipantArea($organizer->getParticipantArea());
@@ -91,7 +92,8 @@ class TripController extends AbstractController
 
         return $this->render("trip/add.html.twig", [
             'tripType' => $tripType->createView(),
-            'tripOrganizer' => $organizer
+            'tripOrganizer' => $organizer,
+            'places' => $places
         ]);
     }
 
