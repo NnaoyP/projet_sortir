@@ -2,7 +2,26 @@
 
 {% block main %}
 
-    {{ form_start(participant_form) }}
-    <button class="btn">Modifier</button>
-    {{ form_end(participant_form) }}
+    <div class="ui stacked segment">
+        <div class="field">
+            {{ form_start(participant_form) }}
+        </div>
+        {{ form_row(participant_form.lastName) }}
+        {{ form_row(participant_form.firstName) }}
+        {{ form_row(participant_form.phoneNumber) }}
+        {{ form_row(participant_form.email) }}
+        {{ form_row(participant_form.participantArea) }}
+        {{ form_row(participant_form.imageUrl) }}
+        <button class="ui primary button">Modifier</button>
+        {{ form_end(participant_form) }}
+    </div>
+
+
+    <div class="ui stacked segment">
+        {{ form_start(password_form) }}
+        {{ form_widget(password_form.password) }}
+        <button class="ui primary button">Modifier</button>
+        {{ form_end(password_form) }}
+    </div>
+
 {% endblock %}
