@@ -14,7 +14,7 @@ class TripStatusManagement extends Command
 
     protected function configure() {
         $this->setDescription('Manage the status trip.')
-            ->setHelp('This command allows you manage status trip automatically'):
+            ->setHelp('This command allows you manage status trip automatically');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
