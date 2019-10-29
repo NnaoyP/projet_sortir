@@ -1,4 +1,9 @@
-function getUserImage(username, background = [255, 255, 255, 0], colored) {
+function getUserImage(username, filepath, background = [255, 255, 255, 0], colored) {
+
+    if (filepath !== '') {
+        return `/uploads/images/${filepath}`
+    }
+
     const hash = sha1(username);
     let col = [0, 0, 0, 255];
 

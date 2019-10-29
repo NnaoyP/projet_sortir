@@ -6,20 +6,12 @@
 
         <link rel="stylesheet" href="/assets/css/semantic.min.css" />
         <link rel="stylesheet" href="/assets/css/style.css" />
-        <link rel="stylesheet" href="/assets/css/sidebar.min.css" />
-        <link rel="stylesheet" href="/assets/css/transition.min.css" />
-        <link rel="stylesheet" href="/assets/css/components/dropdown.min.css" />
         <link rel="stylesheet" href="/assets/css/calendar.min.css" />
 
         {% block stylesheets %}{% endblock %}
 
         <script src="/assets/js/jquery-3.4.1.min.js"></script>
         <script src="/assets/js/semantic.min.js"></script>
-        <script src="/assets/js/components/api.min.js"></script>
-        <script src="/assets/js/components/transition.min.js"></script>
-        <script src="/assets/js/components/visibility.js"></script>
-        <script src="/assets/js/components/sidebar.js"></script>
-        <script src="/assets/js/components/dropdown.min.js"></script>
         <script src="/assets/js/sha1.min.js"></script>
         <script src="/assets/js/identicon.js-master/pnglib.js"></script>
         <script src="/assets/js/identicon.js-master/identicon.js"></script>
@@ -95,7 +87,7 @@
                                              src="/assets/images/square-image.png"
                                              alt="😉"
                                              id="profile-picture"
-                                             onload="this.src = getUserImage('{{ app.user.username }}'); this.onload = null"/>
+                                             onload="this.src = getUserImage('{{ app.user.username }}', '{{ app.user.imageUrl }}'); this.onload = null"/>
                                         <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconnexion</a>)</span>
                                     {% else %}
                                         <a class="ui black button" href="/login">Log in</a>
@@ -146,7 +138,7 @@
                                              src="/assets/images/square-image.png"
                                              alt="😉"
                                              id="profile-picture"
-                                             onload="this.src = getUserImage('{{ app.user.username }}'); this.onload = null"/>
+                                             onload="this.src = getUserImage('{{ app.user.username }}', '{{ app.user.imageUrl }}'); this.onload = null"/>
                                         <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconnexion</a>)</span>
                                     {% else %}
                                         <a class="ui black button" href="/login">Log in</a>
