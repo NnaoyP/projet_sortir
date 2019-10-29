@@ -4,7 +4,7 @@
 {% block pageTitle %}Liste des sorties{% endblock %}
 
 {% block main %}
-    <form class="ui form" method="get" action="{{ path('trip_search') }}">
+    <form class="ui twelve wide column left aligned form" method="get" action="{{ path('trip_search') }}">
         <div class="ui container field">
             <div class="ui grid">
                 <div class="ten wide column">
@@ -81,10 +81,7 @@
             </button>
         </div>
     </form>
-    <div class="ui horizontal divider">
-        Liste
-    </div>
-    <div>
+    <div class="ui sixteen wide column left aligned segment">
         <table class="ui celled padded table">
             <thead>
                 <tr>
