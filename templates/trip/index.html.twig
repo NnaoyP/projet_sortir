@@ -129,7 +129,7 @@
                         <img class="ui avatar image"
                              src="/assets/images/square-image.png"
                              alt="😉"
-                             onload="this.src = getUserImage('{{ trip.organizer.username }}', [218, 218, 218, 255], true); this.onload = null"/>
+                             onload="this.src = getUserImage('{{ trip.organizer.username }}', '{{ trip.organizer.imageUrl }}', [218, 218, 218, 255], true); this.onload = null"/>
                         <span>
                             {{ trip.organizer.firstname }}&nbsp;{{trip.organizer.lastname }}
                             {% if app.user == trip.organizer %}

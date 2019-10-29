@@ -2,26 +2,149 @@
 
 {% block main %}
 
-    <div class="ui stacked segment">
-        <div class="field">
-            {{ form_start(participant_form) }}
+    <div class="ui six wide column">
+        <div class="ui special cards">
+            <div class="card">
+                <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <label for="registration_form_imageUrl">
+                                    <div class="ui inverted button">Changer l'image</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="/assets/images/square-image.png"
+                         id="profile-picture-view"
+                         alt="😉"
+                         onload="this.src = getUserImage('{{ app.user.username }}', '{{ app.user.imageUrl }}', [218, 218, 218, 255], true); this.onload = null">
+                </div>
+                <div class="content">
+                    <a class="header">{{ app.user.firstName }}&nbsp;{{ app.user.lastName}}</a>
+                    <div class="meta">
+                        <span>{{ app.user.username }}</span>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a>
+                        <i class="phone icon"></i>
+                        {{ app.user.phoneNumber }}
+                    </a>
+                </div>
+            </div>
         </div>
-        {{ form_row(participant_form.lastName) }}
-        {{ form_row(participant_form.firstName) }}
-        {{ form_row(participant_form.phoneNumber) }}
-        {{ form_row(participant_form.email) }}
-        {{ form_row(participant_form.participantArea) }}
-        {{ form_row(participant_form.imageUrl) }}
-        <button class="ui primary button">Modifier</button>
-        {{ form_end(participant_form) }}
     </div>
 
+    <div class="ui ten wide column left aligned piled segment">
 
-    <div class="ui stacked segment">
-        {{ form_start(password_form) }}
+        <h4 class="ui horizontal divider">
+            Informations
+        </h4>
+
+        {{ form_start(participant_form, {'attr': {'class': 'ui form'}}) }}
+        <div class="field">
+            {{ form_label(participant_form.lastName) }}
+            {{ form_widget(participant_form.lastName) }}
+            {% if form_errors(participant_form.lastName) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(participant_form.lastName) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {{ form_label(participant_form.firstName) }}
+            {{ form_widget(participant_form.firstName) }}
+            {% if form_errors(participant_form.firstName) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(participant_form.firstName) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {{ form_label(participant_form.phoneNumber) }}
+            {{ form_widget(participant_form.phoneNumber) }}
+            {% if form_errors(participant_form.phoneNumber) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(participant_form.phoneNumber) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {{ form_label(participant_form.email) }}
+            {{ form_widget(participant_form.email) }}
+            {% if form_errors(participant_form.email) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(participant_form.email) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {{ form_label(participant_form.participantArea) }}
+            {{ form_widget(participant_form.participantArea, {'attr': {
+                'class': 'ui search dropdown',
+                'onchange': 'placeSelect(this.value)'}
+            }) }}
+            {% if form_errors(participant_form.participantArea) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(participant_form.participantArea) }}
+                </div>
+            {% endif %}
+        </div>
+
+        {{ form_widget(participant_form.imageUrl, { 'attr': {
+            'hidden': true,
+            'onchange': 'changeImagePreview(this.files)'
+        } }) }}
+
+        <button class="ui right labeled icon green button" name="save">Modifier <i class="check icon"></i> </button>
+
+        {{ form_end(participant_form) }}
+
+        <h4 class="ui horizontal divider">
+            Changer le mot de passe
+        </h4>
+
+        {{ form_start(password_form, {'attr': {'class': 'ui form'}}) }}
+
+        <div class="two field">
+            {{ form_label(password_form.password.first) }}
+            {{ form_widget(password_form.password.first) }}
+            {% if form_errors(password_form.password.first) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(password_form.password.first) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="two field">
+            {{ form_label(password_form.password.second) }}
+            {{ form_widget(password_form.password.second) }}
+            {% if form_errors(password_form.password.second) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(password_form.password.second) }}
+                </div>
+            {% endif %}
+        </div>
+
         {{ form_widget(password_form.password) }}
-        <button class="ui primary button">Modifier</button>
+        <button class="ui right labeled icon green button" name="save">Modifier <i class="check icon"></i> </button>
+
         {{ form_end(password_form) }}
     </div>
 
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function changeImagePreview(files) {
+            console.log(files[0]);
+            files[0].stream.getReader().read().then(value => {
+                console.log(`data:${files[0].type};${value}`);
+            });
+
+            document.getElementById('profile-picture-view').src = files[0];
+        }
+    </script>
 {% endblock %}

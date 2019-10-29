@@ -89,7 +89,7 @@
             <img class="ui avatar image"
                  src="/assets/images/square-image.png"
                  alt="😉"
-                 onload="this.src = getUserImage('{{ participant.username }}', [0, 0, 0, 0], true); this.onload = null"/>
+                 onload="this.src = getUserImage('{{ participant.username }}', '{{ participant.imageUrl }}', [0, 0, 0, 0], true); this.onload = null"/>
             <div class="content">
                 <a class="header" href="/profile/detail/{{ participant.id }}">{{ participant.firstName }}&nbsp;{{ participant.lastName }}</a>
                 <div class="description"><b>{{ participant == trip.organizer ? "Organise la sortie" : 'Participe à la sortie' }}.</b></div>
