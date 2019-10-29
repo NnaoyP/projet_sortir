@@ -122,7 +122,7 @@ body .grid {
 }
 
 .not-small-view {
-    display: block;
+    display: block !important;
 }
 
 .small-view {
