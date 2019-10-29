@@ -34,6 +34,12 @@
             <!-- Following Menu -->
             <div class="ui large top fixed hidden inverted menu">
                 <div class="ui container">
+                    <div class="item">
+                        <div class="top-nav main-title">
+                            <img src="/assets/icons/climbing-adventure-silhouette-white.svg" class="main-logo">
+                            <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
+                        </div>
+                    </div>
                     <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                     {% if app.user %}
                         <a class="item">Mon compte</a>
@@ -53,7 +59,13 @@
             </div>
 
             <!-- Sidebar Menu -->
-            <div class="ui vertical sidebar menu">
+            <div class="ui vertical sidebar inverted menu">
+                <div class="item">
+                    <div class="left-nav main-title">
+                        <img src="/assets/icons/climbing-adventure-silhouette-white.svg" class="main-logo">
+                        <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
+                    </div>
+                </div>
                 <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                 {% if app.user %}
                     <a class="item">Compte</a>
@@ -72,11 +84,25 @@
                     <div class="background"></div>
                     <div>
                         <div class="ui large secondary pointing menu grid row">
-                            <div class="six wide column" style="display: flex; flex-direction: column; justify-content: center">
+                            <a class="toc left aligned item">
+                                <i class="sidebar icon"></i>
+                            </a>
+                            <div class="mobile eight wide column center aligned segment">
+                                <div>
+                                    {% if app.user %}
+                                        <img class="ui avatar image"
+                                             src="/assets/images/square-image.png"
+                                             alt="😉"
+                                             id="profile-picture"
+                                             onload="this.src = getUserImage('{{ app.user.username }}'); this.onload = null"/>
+                                        <span>Bonjour, <b>{{ app.user.firstname }}</b> (<a href="{{ path('app_logout') }}">deconnexion</a>)</span>
+                                    {% else %}
+                                        <a class="ui black button" href="/login">Log in</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="not-mobile six wide column" style="display: flex; flex-direction: column; justify-content: center">
                                 <div class="ui large secondary pointing menu">
-                                    <a class="toc item">
-                                        <i class="sidebar icon"></i>
-                                    </a>
                                     <a class="{{ route == '' ? 'active '}}item" href="/trip">Home</a>
                                     {% if app.user %}
                                         <a class="item">Compte</a>
@@ -105,14 +131,14 @@
                                 </div>
                             </div>
 
-                            <div class="four wide column">
+                            <div class="not-mobile four wide column">
                                 <h2 class="center item main-title">
                                     <img src="/assets/icons/climbing-adventure-silhouette-black.svg" class="main-logo">
                                     <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
                                 </h2>
                             </div>
 
-                            <div class="six wide column" style="display: flex; flex-direction: column; justify-content: center">
+                            <div class="not-mobile six wide column" style="display: flex; flex-direction: column; justify-content: center">
                                 <div>
                                     {% if app.user %}
                                         <img class="ui avatar image"

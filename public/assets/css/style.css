@@ -55,6 +55,29 @@ body .grid {
     font-size: 1.4em;
 }
 
+.main-title.top-nav{
+    font-size: 1.4em;
+    transform: scale(0.9) translateX(-40px);
+}
+
+.main-title.top-nav > .main-logo {
+    transform: translate(calc(-50% - 2px) , 0) !important;
+}
+
+.main-title.left-nav{
+    transform: none !important;
+    font-size: 1.4em;
+}
+
+.main-title.left-nav > .content {
+    transform: scale(1.4) translate(51px, 1px);;
+}
+
+.main-title.left-nav > .main-logo {
+    transform: none !important;
+    margin-left: 0 !important;
+}
+
 .youth-power {
     font-family: "Youth Power", cursive;
 }
@@ -182,6 +205,11 @@ body .grid {
 }
 
 @media only screen and (max-width: 768px) {
+
+    .not-mobile {
+        display: none !important;
+    }
+
     .ui.fixed.menu {
         display: none !important;
     }
@@ -193,6 +221,8 @@ body .grid {
 
     .secondary.pointing.menu .toc.item {
         display: block;
+        transform: translate(20px, -10px);
+        font-size: 1.2em;
     }
 
     .masthead.segment {
@@ -200,7 +230,8 @@ body .grid {
     }
 
     .masthead h1.ui.header {
-        font-size: 1em;
+        font-size: 1.6em;
+        font-weight: 700;
         margin-top: 1.5em;
     }
 
