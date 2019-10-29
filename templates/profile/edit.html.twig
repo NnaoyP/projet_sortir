@@ -139,12 +139,13 @@
 {% block javascripts %}
     <script>
         function changeImagePreview(files) {
-            console.log(files[0]);
-            files[0].stream.getReader().read().then(value => {
-                console.log(`data:${files[0].type};${value}`);
+            const reader = new FileReader();
+
+            reader.addEventListener('loadend', data => {
+                document.getElementById('profile-picture-view').src = data.target.result;
             });
 
-            document.getElementById('profile-picture-view').src = files[0];
+            reader.readAsDataURL(files[0]);
         }
     </script>
 {% endblock %}
