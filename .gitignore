@@ -21,3 +21,8 @@
 ###> jetbrain/idea ###
 /.idea/
 ###< jetbrain/idea ###
+
+###> user images ###
+/public/uploads/images/*
+### <user images ###
+
