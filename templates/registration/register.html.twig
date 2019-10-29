@@ -3,10 +3,23 @@
 {% block title %}Register{% endblock %}
 
 {% block main %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
+
+    <div class="ui ten wide column semantic">
+        <div>
+
+        </div>
+        {{ form_start(registrationForm) }}
+        {{ form_widget(registrationForm.lastName) }}
+        {{ form_widget(registrationForm.firstName) }}
+        {{ form_widget(registrationForm.phoneNumber) }}
+        {{ form_widget(registrationForm.participantArea) }}
+        {{ form_widget(registrationForm.plainPassword.first) }}
+        {{ form_widget(registrationForm.plainPassword.second) }}
+        {{ form_widget(registrationForm.isActive) }}
+        {{ form_widget(registrationForm.imageUrl) }}
 
         <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }}
+    </div>
 {% endblock %}
