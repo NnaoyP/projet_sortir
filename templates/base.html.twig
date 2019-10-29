@@ -36,7 +36,7 @@
                 <div class="ui container">
                     <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                     {% if app.user %}
-                        <a class="item">Compte</a>
+                        <a class="item">Mon compte</a>
                         <a class="item" href="/trip/add">Organiser une sortie</a>
                         <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                         {% if is_granted('ROLE_ADMIN') %}
@@ -89,7 +89,7 @@
                                                 {% elseif route starts with 'trip' %}
                                                     Liste des sorties
                                                 {% else %}
-                                                    sortie
+                                                    Sorties
                                                 {% endif %}
                                             </span>
                                             <i class="dropdown icon"></i>
