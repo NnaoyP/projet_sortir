@@ -18,23 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TripController extends AbstractController
 {
+
     /**
      * @Route("/trip", name="trip", methods={"GET"})
-     * @return Response
-     */
-    public function searchTrip()
-    {
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findAllNotClosed();
-        $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
-
-        return $this->render("trip/index.html.twig", [
-            'trips' => $trips,
-            'places' => $places
-        ]);
-    }
-
-    /**
-     * @Route("/trip/search", name="trip_search", methods={"GET"})
      * @param Request $request
      * @return Response
      */

@@ -45,10 +45,20 @@ class TripRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('t');
 
+        $queryBuilder->addSelect('pp')->leftJoin('t.participants', 'pp');
+
         // recherche par site
         if(!empty($args->get('place'))) {
-            $queryBuilder->innerJoin('t.place', 'p', join::WITH, 'p.id = :tripPlace')
+            $queryBuilder->addSelect('p')
+                ->innerJoin('t.place', 'p', join::WITH, 'p.id = :tripPlace')
                 ->setParameter('tripPlace', $args->get('place'));
+        }
+
+        // recherche dont la sortie est organisée par l'utilisteur
+        if (!empty($args->get('isOrganizer'))) {
+            $queryBuilder->addSelect('o')
+                ->innerJoin('t.organizer', 'o', join::WITH, 'o.id = :userId')
+                ->setParameter('userId', $args->get('userId'));
         }
 
         // recherche par nom de sortie
@@ -70,11 +80,6 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('tripEndDate', gmdate('Y-m-d H:i:s', strtotime($args->get('endDate'))));
         }
 
-        // recherche dont la sortie est organisée par l'utilisteur
-        if (!empty($args->get('isOrganizer'))) {
-            $queryBuilder->innerJoin('t.organizer', 'o', join::WITH, 'o.id = :userId')
-                ->setParameter('userId', $args->get('userId'));
-        }
 
         // recherche dont l'utilisateur est un participant
         if (!empty($args->get('isParticipantOn'))) {
@@ -97,6 +102,10 @@ class TripRepository extends ServiceEntityRepository
         // ne pas prendre les archivés
         $queryBuilder->andWhere('t.status <> :closedStatus')
             ->setParameter('closedStatus', TripStatus::CLOSED);
+
+
+        //ordonnée par date d'inscription'
+        $queryBuilder->addOrderBy('t.deadlineDate', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
     }
