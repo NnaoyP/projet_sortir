@@ -48,6 +48,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
                         {% endif %}
+                        <a class="item" href="/logout" target="_self">Déconnexion</a>
                     {% else %}
                         <div class="right menu">
                             <div class="item">
