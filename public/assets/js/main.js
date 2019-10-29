@@ -41,6 +41,13 @@ $(document).ready(function() {
     });
     $('.ui.checkbox').checkbox();
     $('.date-time').calendar({ampm: false, formatter: {
+        time: (date, settings) => {
+            console.log(date);
+            const hours = (date.getHours() < 10)? '0' + (date.getHours()) : (date.getHours());
+            const minutes = (date.getMinutes() < 10)? '0' + (date.getMinutes()) : (date.getMinutes());
+
+            return `${hours}:${minutes}`;
+        },
         date: (date, settings) => {
             const month = (date.getUTCMonth() + 1    < 10)? '0' + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1);
             const day = (date.getUTCDate() < 10)? '0' + date.getUTCDate() : date.getUTCDate();

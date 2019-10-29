@@ -5,9 +5,9 @@
 {% block pageTitle %} {{ route starts with 'trip_edit' ? "Modifier une sortie" : "Créer une sortie" }}{% endblock %}
 
 {% block main %}
-    {{ form_start(tripType, { 'attr': {'class': 'ui form grid container'}}) }}
+    {{ form_start(tripType, { 'attr': {'class': 'ui form grid center aligned'}}) }}
 
-        <div class="ui eight wide column">
+        <div class="ui six wide column left aligned">
             <div class="inline field">
                 <label for="trip-name">Nom de la sortie</label>
                 <div class="ui input">
@@ -80,7 +80,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="ui eight wide column">
+        <div class="ui six wide column left aligned">
             <div class="inline underlined field form-information">
                 <label>ville organisatrice :</label>
                 <p>
