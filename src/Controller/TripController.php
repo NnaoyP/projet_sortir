@@ -82,7 +82,7 @@ class TripController extends AbstractController
                     $message->setTo($userEmail['email']);
                     $message->setBody($this->renderView('emails/registration.html.twig', ['name' => $trip->getName(),'text/html']));
 
-                    $mailer->send($message);
+                    //$mailer->send($message);
                 } catch (Exception $e){
                     //le mail ne s'est pas envoyé, créer un log
                 }
@@ -130,7 +130,7 @@ class TripController extends AbstractController
                 $message->setTo($trip->getOrganizer()->getEmail());
                 $message->setBody($this->renderView('emails/add_participant.html.twig', ['tripName' => $trip->getName(),'text/html']));
 
-                $mailer->send($message);
+                //$mailer->send($message);
             } catch (Exception $e){
                 //le mail ne s'est pas envoyé, créer un log
             }
