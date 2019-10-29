@@ -19,7 +19,7 @@
             {% endif %}
 
             {% if error %}
-                <div class="ui error message">Identifiants invalides</div>
+                <div class="ui error message">{{ error.getMessage() }}</div>
             {% endif %}
             <form method="post" class="ui large form">
 
