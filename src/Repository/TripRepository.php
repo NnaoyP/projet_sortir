@@ -41,7 +41,7 @@ class TripRepository extends ServiceEntityRepository
     */
 
 
-    public function findByFilter(ParameterBag $args): ?array
+    public function findByFilter(ParameterBag $args): \Doctrine\ORM\Query
     {
         $queryBuilder = $this->createQueryBuilder('t');
 
@@ -107,7 +107,7 @@ class TripRepository extends ServiceEntityRepository
         //ordonnée par date d'inscription'
         $queryBuilder->addOrderBy('t.deadlineDate', 'DESC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery();
     }
 
     public function findAllNotClosed() {

@@ -94,7 +94,8 @@
                 </tr>
             </thead>
             <tbody>
-            {% for trip in trips %}
+            <h1>Nombre de sorties trouvé: {{ pagination.getTotalItemCount }}</h1>
+            {% for trip in pagination %}
                 <tr id="trip-{{ trip.id }}">
                     <td>
                         <b class="ui center aligned header">{{ trip.name }}</b>
@@ -164,5 +165,6 @@
             {% endfor %}
             </tbody>
         </table>
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}

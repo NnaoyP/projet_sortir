@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class TripController extends AbstractController
 {
@@ -22,21 +23,32 @@ class TripController extends AbstractController
     /**
      * @Route("/trip", name="trip", methods={"GET"})
      * @param Request $request
+     * @param PaginatorInterface $paginator
      * @return Response
      */
-    public function searchTripWithFilter(Request $request)
+    public function searchTripWithFilter(Request $request, PaginatorInterface $paginator)
     {
-        // récupération des sorties publiées
 
+        // récupération des sorties publiées
         $parameterBag = $request->query;
         $parameterBag->add(['email' =>  $this->getUser()->getEmail()]); //ajout du mail de l'utilisateur pour la recherche de sorties dont je suis l'organisateur
         $parameterBag->add(['userId' => $this->getUser()->getId()]);
-        
-        $trips = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($parameterBag);
+
+        // récupération du querybuild pour le paginator
+        $queryBuilder = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($parameterBag);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        //$trips =
         $places = $this->getDoctrine()->getRepository(TripPlace::class)->findAll();
 
         return $this->render("trip/index.html.twig", [
-            'trips' => $trips,
+            //'trips' => $trips,
+            'pagination' => $pagination,
             'places' => $places
         ]);
     }
