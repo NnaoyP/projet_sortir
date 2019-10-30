@@ -177,13 +177,13 @@ class TripController extends AbstractController
             $em->persist($trip);
             $em->flush();
 
-            $message = new \Swift_Message('Une nouvelle sortie ENI est disponible!');
-            $message->setFrom('eni.sortir@gmail.com');
-            $message->setTo($trip->getOrganizer()->getEmail());
-            $message->setBody($this->renderView('emails/remove_participant.html.twig', ['tripName' => $trip->getName(),'text/html']));
-
             try {
-                $mailer->send($message);
+                $message = new \Swift_Message('Un utilisateur s\'est désinscrit de votre sortie.');
+                $message->setFrom('eni.sortir@gmail.com');
+                $message->setTo($trip->getOrganizer()->getEmail());
+                $message->setBody($this->renderView('emails/remove_participant.html.twig', ['tripName' => $trip->getName(),'text/html']));
+
+                //$mailer->send($message);
             } catch (Exception $e){
                 //le mail ne s'est pas envoyé, créer un log
             }
