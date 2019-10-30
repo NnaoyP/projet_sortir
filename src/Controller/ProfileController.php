@@ -77,6 +77,8 @@ class ProfileController extends AbstractController
                     $this->getParameter('image_profile_directory'),
                     $newFilename
                 );
+                $participant->setImageUrl($newFilename);
+
             }
 
             $em->persist($participant);
