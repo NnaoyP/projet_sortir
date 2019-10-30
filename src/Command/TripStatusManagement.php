@@ -19,6 +19,6 @@ class TripStatusManagement extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
+        $this->container = $this->getApplication()->getKernel()->getContainer();
     }
 }
