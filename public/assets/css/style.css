@@ -146,11 +146,21 @@ table.linked.rows tr {
     background-color: #1c2023 !important;
     color: white !important;
     transition: ease-out 0.2s;
+    cursor: pointer;
 }
 
 .dragdrop.dragged {
     opacity: 0.6;
     padding: 22px !important;
+}
+
+.red-text {
+    color: #C82829 !important;
+}
+.error-no-ul > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 /*

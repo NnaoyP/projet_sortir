@@ -5,15 +5,30 @@
 
 {% block main %}
     <div class="ui five wide middle aligned column grid">
-        <div class="ui fourteen wide column placeholder dragdrop segment">
-            <h3 class="ui icon inverted header">
-                <i class="upload icon"></i>
-                Glissez un fichier .csv
-                <span class="sub header">Pour importer des utilisateurs.</span>
-                <span class="sub header"><a><b>Ou cliquez ici</b></a></span>
-            </h3>
+        <label for="upload_csv_file" class="fourteen wide column">
+            <div class="ui placeholder dragdrop segment" id="drop-zone">
+                <h3 class="ui icon inverted header">
+                    <i class="upload icon"></i>
+                    Glissez un fichier .csv
+                    <span class="sub header" id="csv-info">Pour importer des utilisateurs.</span>
+                </h3>
+                <button class="ui disabled primary button" id="csv-submit"
+                        onclick="document.getElementById('csv-form').submit()">
+                    <i class="file icon"></i>
+                    Envoyer
+                </button>
+            </div>
+        </label>
+        {{ form_start(csv_form, { 'attr': { 'id': 'csv-form' } }) }}
+        {{ form_widget(csv_form.file, { 'attr': { 'hidden': true, 'onchange': 'fileInputButton(this.files)' } }) }}
 
-        </div>
+        {% if form_errors(csv_form.file) %}
+            <div class="ui error message error-no-ul">
+                {{ form_errors(csv_form.file) }}
+            </div>
+        {% endif %}
+
+        {{ form_end(csv_form) }}
     </div>
 
     <div class="ui ten wide column left aligned piled segment">
@@ -47,4 +62,54 @@
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        function dragInStyle(event) {
+            event.preventDefault();
+            document.getElementById('drop-zone').classList.add('dragged');
+        }
+
+        function dragOutStyle (event) {
+            event.preventDefault();
+            document.getElementById('drop-zone').classList.remove('dragged');
+        }
+
+        function fileInputButton(files) {
+            if (files.length > 0) {
+                document.getElementById('csv-submit').classList.remove('disabled');
+                document.getElementById('csv-submit').classList.add('primary');
+            } else {
+                document.getElementById('csv-submit').classList.add ('disabled');
+                document.getElementById('csv-submit').classList.remove('primary');
+            }
+        }
+
+        $(document).ready(() => {
+
+            document.getElementById('drop-zone').addEventListener('dragover', (event) => {dragInStyle(event)});
+            document.getElementById('drop-zone').addEventListener('dragenter', (event) => {dragInStyle(event)});
+
+            document.getElementById('drop-zone').addEventListener('dragleave', (event) => {dragOutStyle(event)});
+            document.getElementById('drop-zone').addEventListener('dragend', (event) => {dragOutStyle(event)});
+            document.getElementById('drop-zone').addEventListener('drop', (event) => {
+                dragOutStyle(event);
+                if (event.dataTransfer.files.length === 1 && event.dataTransfer.files[0].name.match(/^.*[.](?:csv)$/)) {
+                    event.dataTransfer.files[0].type = 'text/csv';
+                    document.getElementById('upload_csv_file').files = event.dataTransfer.files;
+                    document.getElementById('csv-info').innerText = `Fichier chargé : ${event.dataTransfer.files[0].name}`;
+                    document.getElementById('csv-info').classList.remove('red-text');
+                    document.getElementById('csv-submit').classList.remove('disabled');
+                    document.getElementById('csv-submit').classList.add('primary');
+                } else {
+                    document.getElementById('csv-info').innerText = `Le fichier chargé doit être un CSV`;
+                    document.getElementById('csv-info').classList.add('red-text');
+                    document.getElementById('csv-submit').classList.add('disabled');
+                    document.getElementById('csv-submit').classList.remove('primary');
+                }
+            });
+        });
+    </script>
 {% endblock %}
