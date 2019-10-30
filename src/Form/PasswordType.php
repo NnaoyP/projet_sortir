@@ -16,10 +16,11 @@ class PasswordType extends AbstractType
                 'label' => 'Ancien mot de pass',
                 'mapped' => false
             ])
-            ->add('password', RepeatedType::class, array(
+            ->add('newPassword', RepeatedType::class, array(
                 'type' => \Symfony\Component\Form\Extension\Core\Type\PasswordType::class,
                 'first_options'  => array('label' => 'Mot de passe'),
-                'second_options' => array('label' => 'Confirmation du mot de passe')
+                'second_options' => array('label' => 'Confirmation du mot de passe'),
+                'mapped' => false
             ))
         ;
     }

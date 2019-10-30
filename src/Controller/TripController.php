@@ -31,8 +31,9 @@ class TripController extends AbstractController
 
         // récupération des sorties publiées
         $parameterBag = $request->query;
-        $parameterBag->add(['email' =>  $this->getUser()->getEmail()]); //ajout du mail de l'utilisateur pour la recherche de sorties dont je suis l'organisateur
-        $parameterBag->add(['userId' => $this->getUser()->getId()]);
+        if ($this->getUser()) {
+            $parameterBag->add(['userId' => $this->getUser()->getId()]);
+         }
 
         // récupération du querybuild pour le paginator
         $queryBuilder = $this->getDoctrine()->getRepository(Trip::class)->findByFilter($parameterBag);

@@ -9,6 +9,7 @@ use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -85,27 +86,31 @@ class ProfileController extends AbstractController
         }
 
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
-            $oldPassword = $participant->setPassword($passwordEncoder->encodePassword($participant, $passwordForm->get('password')->getData()));
+            $oldPassword = $passwordForm->get('oldPassword')->getData();
 
-            if ($oldPassword == $participant->getPassword()) {
-                $participant->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $participant,
-                        $passwordForm->get('password')->getData()
-                    )
-                );
-            } else {
-                throw new \ErrorException("L'ancien mot de passe ne correspond pas.");
+
+            dd($participant->getPassword(), $passwordEncoder->encodePassword($participant, $passwordForm->get('oldPassword')->getData()));
+
+            // si l'ancien mot de passe correspond au mot de passe du user alors on change le mot de passe
+            if ($passwordEncoder->isPasswordValid( $participant, $oldPassword)) {
+                $participant->setPassword($passwordEncoder->encodePassword($participant, $passwordForm->get('password')->getData()));
+
+                dd($participant->getPassword(), $oldPassword);
+
+                $em->persist($participant);
+                $em->flush();
+
+                return $this->redirectToRoute("profile_detail",
+                    ['id' => $participant->getId()]);
+
+
+            }
+            // si l'ancien mot de passe ne correspond pas au mot de passe du user alors on met une erreur
+            else {
+                $passwordForm->get('oldPassword')->addError(new FormError("L'ancien mot de passe ne correspond pas."));
             }
 
-
-            $em->persist($participant);
-            $em->flush();
-
-            return $this->redirectToRoute("profile_detail",
-                ['id' => $participant->getId()]);
         }
-
 
         return $this->render("profile/edit.html.twig", [
             "participant_form" => $participantForm->createView(),
