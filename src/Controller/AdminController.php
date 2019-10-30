@@ -83,6 +83,7 @@ class AdminController extends AbstractController
                 $participant->setEmail($passwordEncoder->encodePassword($participant, $participant->getEmail()));
                 $participant->setLastName("");
                 $participant->setFirstName("");
+                $participant->setIsDeleted(1);
 
                 //annuler les sorties organiser par l'utilisateur
                 foreach($participant->getOrganizedTrips() as $trip) {
