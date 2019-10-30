@@ -1,6 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
+{% block title %}profil - details{% endblock %}
+{% block pageTitle %}Profil de {{ participant.firstName }}{% endblock %}
 
-    {{ participant.username }}
+{% block main %}
+    <div class="ui six wide column">
+        <div class="ui special cards">
+            <div class="card">
+                <img src="/assets/images/square-image.png"
+                     id="profile-picture-view"
+                     alt="😉"
+                     onload="this.src = getUserImage('{{ participant.username }}', '{{ participant.imageUrl }}', [218, 218, 218, 255], true); this.onload = null">
+                <div class="content">
+                    <a class="header">{{ participant.firstName }}&nbsp;{{ participant.lastName}}</a>
+                    <div class="meta">
+                        <span>{{ participant.username }}</span>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a>
+                        <i class="phone icon"></i>
+                        {{ participant.phoneNumber }}
+                    </a>
+
+                    <div>Lieu de formation: {{ participant.participantArea.name }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui ten wide left aligned column piled segment">
+        <h2 class="ui center aligned icon header">
+            <i class="circular users icon"></i>
+            Sorties organisées
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui large feed" style="overflow-y: scroll;overflow-x: hidden;max-height: 40vh;">
+        {% for trip in participant.organizedTrips|sort((a, b) => a.startDate <= b.startDate) %}
+            <div class="event">
+                <div class="label">
+                    <img src="/assets/images/square-image.png"
+                         class="ui avatar"
+                         alt="😉"
+                         onload="this.src = getUserImage('{{ participant.username }}', '{{ participant.imageUrl }}', [218, 218, 218, 255], true); this.onload = null">
+                </div>
+                <div class="content">
+                    <div class="summary">
+                        <a class="user">
+                            {{ participant.firstName }}&nbsp;{{ participant.lastName }}
+                        </a> {{ trip.startDate | date('Y-m-d-H-i') <  "now"| date('Y-m-d-H-i', 'Europe/Paris') ? 'a organisé' : 'organise'}} : {{ trip.name }}
+                        <div class="date">
+                            Le {{ trip.startDate|date('d/m/Y H:i') }}
+                        </div>
+                    </div>
+                    <div class="extra text">
+                        {{ trip.description }}
+                    </div>
+                    <div class="meta">
+                        <a class="like">
+                            <i class="building icon"></i> à {{ trip.place.name }}
+                        </a>
+                        <a class="like">
+                            <i class="users icon"></i> {{ trip.participants|length }} participants
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
 {% endblock %}
