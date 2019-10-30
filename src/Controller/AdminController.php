@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Entity\TripStatus;
+use App\Form\UploadCsvType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
@@ -16,14 +19,38 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/admin", name="admin")
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index( )
+    public function index(Request $request)
     {
         $participants = $this->getDoctrine()->getRepository(Participant::class)->findAll();
+        $csvForm = $this->createForm(UploadCsvType::class);
+        $csvForm->handleRequest($request);
+
+        if ($csvForm->isSubmitted() && $csvForm->isValid() ) {
+            $csvFile = $csvForm['brochure']->getData();
+
+            if ($csvFile) {
+                $originalFilename = pathinfo($csvFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$csvFile->guessExtension();
+
+                try {
+                    $csvFile->move(
+                        $this->getParameter('csv_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+            }
+        }
+
 
         return $this->render('admin/index.html.twig', [
-            'participants' => $participants
+            'participants' => $participants,
+            'csv_form' => $csvForm
         ]);
     }
 
@@ -79,4 +106,5 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin');
 
     }
+
 }
