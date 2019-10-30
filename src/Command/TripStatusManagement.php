@@ -42,24 +42,31 @@ class TripStatusManagement extends Command
         $today = (new \DateTime())->setTimezone(new \DateTimeZone('Europe/Paris'));
         $trips = $this->entityManager->getRepository(Trip::class)->findAllNotClosed();
 
+
         $output->writeln('Script exécuté le '. $today->format('Y-m-d H:i:s'));
+        $output->writeln('');
 
         foreach ($trips as $trip) {
 
-
-            // on ferme la sortie après 1 mois d'existence
+            //si la date de la sortie est antérieur à aujourd'hui alors on fait du traitement
             if ($trip->getStartDate() < $today) {
                 $output->writeln('Id de la sortie: ' . $trip->getId() .' | Date du début de la sortie: ' . $trip->getStartDate()->format('Y-m-d H:i:s') . ' | Ancienneté: ' . $today->diff($trip->getStartDate())->format('%d'));
 
+                // on ferme la sortie après 1 mois d'existence
                 if ($trip->getStartDate()->diff($today)->format('%d') > 30) {
                     $trip->setStatus(TripStatus::CLOSED);
-                } else {
+                }
+                //sinon on met juste l'état de la sortie à terminée
+                else {
                     $trip->setStatus(TripStatus::DONE);
                 }
+
+                $this->entityManager->persist($trip);
             }
-
-
-
         }
+
+        $this->entityManager->flush();
+
+        $output->writeln('Script terminé!');
     }
 }

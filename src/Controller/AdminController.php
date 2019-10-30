@@ -50,7 +50,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/index.html.twig', [
             'participants' => $participants,
-            'csv_form' => $csvForm
+            'csv_form' => $csvForm->createView()
         ]);
     }
 

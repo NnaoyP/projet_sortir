@@ -13,7 +13,7 @@ class UploadCsvType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('imageUrl', FileType::class, [
+            ->add('file', FileType::class, [
                 'label' => 'Féchier csv pour import utilisateur',
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
