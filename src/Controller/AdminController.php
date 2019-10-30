@@ -69,7 +69,7 @@ class AdminController extends AbstractController
                 $participant->setIsActive(false);
                 break;
 
-            case 'deban':
+            case 'unban':
                 $participant->setIsActive(true);
                 break;
 
