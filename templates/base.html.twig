@@ -34,7 +34,7 @@
                     </div>
                     <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                     {% if app.user %}
-                        <a class="item">Mon compte</a>
+                        <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
                         <a class="item" href="/trip/add">Organiser une sortie</a>
                         <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                         {% if is_granted('ROLE_ADMIN') %}
@@ -61,7 +61,7 @@
                 </div>
                 <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
                 {% if app.user %}
-                    <a class="item">Compte</a>
+                    <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
                     <a class="item" href="/trip/add">Organiser une sortie</a>
                     <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -98,7 +98,7 @@
                                 <div class="ui large secondary pointing menu">
                                     <a class="{{ route == '' ? 'active '}}item" href="/trip">Home</a>
                                     {% if app.user %}
-                                        <a class="item">Compte</a>
+                                        <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
                                         <div class="ui dropdown item {{ route starts with 'trip' ? 'link-active' }}">
                                             <span>
                                                 {% if route starts with 'trip_add' %}
