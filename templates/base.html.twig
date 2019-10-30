@@ -39,6 +39,7 @@
                         <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                         {% if is_granted('ROLE_ADMIN') %}
                             <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
+                            <a class="{{ route starts with 'admin' ? 'active '}}item" href="/admin">Gérer les utilisateurs</a>
                         {% endif %}
                         <a class="item" href="/logout" target="_self">Déconnexion</a>
                     {% else %}
@@ -66,6 +67,7 @@
                     <a class="item" href="/trip" target="_self">Rechercher une sortie</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
+                        <a class="{{ route starts with 'admin' ? 'active '}}item" href="/admin">Gérer les utilisateurs</a>
                     {% endif %}
                 {% else %}
                     <a class="item">Login</a>
@@ -118,7 +120,20 @@
                                             </div>
                                         </div>
                                         {% if is_granted('ROLE_ADMIN') %}
-                                            <a class="{{ route starts with 'register' ? 'active '}}item" href="/register">Créer un utilisateur</a>
+                                            <div class="{{ route starts with 'register' or route starts with 'admin' ? 'link-active '}} ui dropdown item">
+                                                {% if route starts with 'register' %}
+                                                    Créer un utilisateur
+                                                {% elseif route starts with 'admin' %}
+                                                    Gérer les utilisateurs
+                                                {% else %}
+                                                    Administration
+                                                {% endif %}
+                                                <i class="dropdown icon"></i>
+                                                <div class="menu">
+                                                    <a class="item" href="/register">Créer un utilisateur</a>
+                                                    <a class="item" href="/admin">Gérer les utilisateurs</a>
+                                                </div>
+                                            </div>
                                         {% endif %}
                                     {% endif %}
                                 </div>
