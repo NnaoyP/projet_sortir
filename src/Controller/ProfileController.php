@@ -88,22 +88,15 @@ class ProfileController extends AbstractController
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
             $oldPassword = $passwordForm->get('oldPassword')->getData();
 
-
-            dd($participant->getPassword(), $passwordEncoder->encodePassword($participant, $passwordForm->get('oldPassword')->getData()));
-
             // si l'ancien mot de passe correspond au mot de passe du user alors on change le mot de passe
             if ($passwordEncoder->isPasswordValid( $participant, $oldPassword)) {
-                $participant->setPassword($passwordEncoder->encodePassword($participant, $passwordForm->get('password')->getData()));
-
-                dd($participant->getPassword(), $oldPassword);
+                $participant->setPassword($passwordEncoder->encodePassword($participant, $passwordForm->get('newPassword')->getData()));
 
                 $em->persist($participant);
                 $em->flush();
 
                 return $this->redirectToRoute("profile_detail",
                     ['id' => $participant->getId()]);
-
-
             }
             // si l'ancien mot de passe ne correspond pas au mot de passe du user alors on met une erreur
             else {

@@ -13,7 +13,7 @@ class PasswordType extends AbstractType
     {
         $builder
             ->add('oldPassword', \Symfony\Component\Form\Extension\Core\Type\PasswordType::class, [
-                'label' => 'Ancien mot de pass',
+                'label' => 'Ancien mot de passe',
                 'mapped' => false
             ])
             ->add('newPassword', RepeatedType::class, array(

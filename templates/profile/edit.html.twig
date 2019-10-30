@@ -108,26 +108,26 @@
         {{ form_start(password_form, {'attr': {'class': 'ui form'}}) }}
 
         <div class="two field">
-            {{ form_label(password_form.password.first) }}
-            {{ form_widget(password_form.password.first) }}
-            {% if form_errors(password_form.password.first) %}
+            {{ form_label(password_form.newPassword.first) }}
+            {{ form_widget(password_form.newPassword.first) }}
+            {% if form_errors(password_form.newPassword.first) %}
                 <div class="ui pointing red basic label error-label">
-                    {{ form_errors(password_form.password.first) }}
+                    {{ form_errors(password_form.newPassword.first) }}
                 </div>
             {% endif %}
         </div>
 
         <div class="two field">
-            {{ form_label(password_form.password.second) }}
-            {{ form_widget(password_form.password.second) }}
-            {% if form_errors(password_form.password.second) %}
+            {{ form_label(password_form.newPassword.second) }}
+            {{ form_widget(password_form.newPassword.second) }}
+            {% if form_errors(password_form.newPassword.second) %}
                 <div class="ui pointing red basic label error-label">
-                    {{ form_errors(password_form.password.second) }}
+                    {{ form_errors(password_form.newPassword.second) }}
                 </div>
             {% endif %}
         </div>
 
-        {{ form_widget(password_form.password) }}
+        {{ form_widget(password_form.oldPassword) }}
         <button class="ui right labeled icon green button" name="save">Modifier <i class="check icon"></i> </button>
 
         {{ form_end(password_form) }}
