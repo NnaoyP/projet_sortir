@@ -1,6 +1,9 @@
 function getUserImage(username, filepath, background = [255, 255, 255, 0], colored) {
 
     if (filepath !== '') {
+        if (filepath === 'deleted') {
+            return '/assets/images/deleted.png'
+        }
         return `/uploads/images/${filepath}`
     }
 

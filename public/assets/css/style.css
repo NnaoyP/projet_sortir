@@ -141,6 +141,18 @@ table.linked.rows tr {
     cursor: pointer;
 }
 
+.dragdrop {
+    border: dashed #676a6d 4px !important;
+    background-color: #1c2023 !important;
+    color: white !important;
+    transition: ease-out 0.2s;
+}
+
+.dragdrop.dragged {
+    opacity: 0.6;
+    padding: 22px !important;
+}
+
 /*
     SEMANTIC UI CLASSES
 */

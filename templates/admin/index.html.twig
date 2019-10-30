@@ -1,20 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Panel admin{% endblock %}
+{% block pageTitle %}Gestion des utilisateurs{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block main %}
+    <div class="ui five wide middle aligned column grid">
+        <div class="ui fourteen wide column placeholder dragdrop segment">
+            <h3 class="ui icon inverted header">
+                <i class="upload icon"></i>
+                Glissez un fichier .csv
+                <span class="sub header">Pour importer des utilisateurs.</span>
+                <span class="sub header"><a><b>Ou cliquez ici</b></a></span>
+            </h3>
 
-<div class="example-wrapper">
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/projet_sortir/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/projet_sortir/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
-
-</div>
+    <div class="ui ten wide column left aligned piled segment">
+        <h2 class="ui center aligned icon header">
+            <i class="circular users icon"></i>
+            Liste des utilisateurs
+        </h2>
+        <div class="ui divider"></div>
+        <div class="ui middle aligned very relaxed divided list" style="overflow-y: scroll;overflow-x: hidden;max-height: 40vh;">
+            {% for user in participants %}
+            <div class="item">
+                <img class="ui avatar image"
+                     src="/assets/images/square-image.png"
+                     alt="😉"
+                     onload="this.src = getUserImage('{{ user.username }}', '{{ user.imageUrl }}'); this.onload = null">
+                <div class="content">
+                    {{ user.firstName }}&nbsp;{{ user.lastName }} ({{ user.username }})
+                </div>
+                <div class="right floated content">
+                    <div class="ui two large buttons">
+                        {% if user.isActive %}
+                            <a class="ui negative button" href="/admin/action/{{ user.id }}/ban">Bannir</a>
+                        {% else %}
+                            <a class="ui positive button" href="/admin/action/{{ user.id }}/unban">Débannir</a>
+                        {% endif %}
+                            <div class="or" data-text="ou"></div>
+                        <a class="ui secondary button" href="/admin/action/{{ user.id }}/delete">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
