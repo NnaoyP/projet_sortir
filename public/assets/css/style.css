@@ -137,6 +137,10 @@ body .grid {
     display: block !important;
 }
 
+table.linked.rows tr {
+    cursor: pointer;
+}
+
 /*
     SEMANTIC UI CLASSES
 */

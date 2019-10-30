@@ -88,7 +88,7 @@
                 Sorties trouvés : {{ pagination.getTotalItemCount }}
             </div>
         </h2>
-        <table class="ui celled selectable table">
+        <table class="ui celled selectable linked rows table">
             <thead>
                 <tr>
                     <th class="single line">Nom</th>
@@ -101,9 +101,10 @@
             </thead>
             <tbody>
             {% for trip in pagination %}
-                <tr id="trip-{{ trip.id }}">
+                <tr id="trip-{{ trip.id }}"
+                    data-href="{{ trip.status.id != constant('App\\Entity\\TripStatus::CREATION') ? '/trip/details/' ~ trip.id }}">
                     <td>
-                        <b class="ui center aligned">{{ trip.name }}</b>
+                        <a href="{{ trip.status.id != constant('App\\Entity\\TripStatus::CREATION') ? '/trip/details/' ~ trip.id }}"><b class="ui center aligned">{{ trip.name }}</b></a>
                     </td>
                     <td class="ui list">
                         <div class="item">
@@ -138,68 +139,81 @@
                         </span>
                     </td>
                     <td>
-                        <div class="not-small-view mobile {{ is_granted('ROLE_ADMIN') ? 'not-admin-view' }}">
-                            {% if trip.status.id != constant('App\\Entity\\TripStatus::CREATION') %}
-                                <a class="ui right labeled icon secondary button" href="/trip/details/{{ trip.id }}">Afficher<i class="eye icon"></i></a>
-                            {% endif %}
+                        <div class="large ui two buttons">
                             {% if trip.status.id != constant('App\\Entity\\TripStatus::CLOSED') %}
                                 {% if app.user == trip.organizer %}
 
                                     {% if trip.status.id == constant('App\\Entity\\TripStatus::CREATION') %}
-                                        <a class="ui right labeled icon button" href="/trip/edit/{{ trip.id }}">Modifier<i class="edit icon"></i></a>
-                                        <a class="ui right labeled icon primary button" href="/trip/action/{{ trip.id }}/publish">Publier<i class="save icon"></i></a>
+                                        <a href="/trip/edit/{{ trip.id }}" class="ui vertical animated not-mobile button" tabindex="0">
+                                            <div class="hidden content">Modifier</div>
+                                            <div class="visible content">
+                                                <i class="edit icon"></i>
+                                            </div>
+                                        </a>
+                                        <a class="ui mobile left labeled icon button"
+                                           href="/trip/edit/{{ trip.id }}"
+                                        ><i class="edit icon"></i>Modifier</a>
+
+                                        <a href="/trip/action/{{ trip.id }}/publish" class="ui vertical animated not-mobile primary button" tabindex="0">
+                                            <div class="hidden content">Publier</div>
+                                            <div class="visible content">
+                                                <i class="save icon"></i>
+                                            </div>
+                                        </a>
+                                        <a class="ui mobile left labeled icon primary button"
+                                           href="/trip/action/{{ trip.id }}/publish"
+                                        ><i class="save icon"></i>Publier</a>
+
                                     {% elseif trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and trip.startDate|date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris') %}
-                                        <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
+                                        <a href="/trip/action/{{ trip.id }}/cancel" class="ui vertical animated not-mobile negative button" tabindex="0">
+                                            <div class="hidden content">Annuler</div>
+                                            <div class="visible content">
+                                                <i class="times circle icon"></i>
+                                            </div>
+                                        </a>
+                                        <a href="/trip/action/{{ trip.id }}/cancel"
+                                           class="ui mobile left labeled icon negative button"
+                                        ><i class="times circle icon"></i>Annuler</a>
                                     {% endif %}
 
                                 {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') or trip.status.id == constant('App\\Entity\\TripStatus::FULL') %}
                                     {% if app.user in trip.participants and trip.startDate | date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris')  %}
-                                        <a class="ui right labeled icon negative button" href="/trip/rem-participant/{{ trip.id }}">Se désister<i class="user times icon"></i></a>
+                                        <a href="/trip/rem-participant/{{ trip.id }}" class="ui vertical animated not-mobile secondary button" tabindex="0">
+                                            <div class="hidden content">Se désister</div>
+                                            <div class="visible content">
+                                                <i class="user times icon"></i>
+                                            </div>
+                                        </a>
+                                        <a class="ui mobile left labeled icon negative button"
+                                           href="/trip/rem-participant/{{ trip.id }}"
+                                        ><i class="user times icon"></i>Se désister</a>
                                     {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') and trip.deadLineDate | date('Y-m-d-H-i') >  "now"| date('Y-m-d-H-i', 'Europe/Paris')  %}
-                                        <a class="ui right labeled icon positive button" href="/trip/add-participant/{{ trip.id }}">S'inscrire<i class="user plus icon"></i></a>
+                                        <a href="/trip/add-participant/{{ trip.id }}" class="ui vertical animated not-mobile positive button" tabindex="0">
+                                            <div class="hidden content">S'inscrire</div>
+                                            <div class="visible content">
+                                                <i class="user plus icon"></i>
+                                            </div>
+                                        </a>
+                                        <a class="ui mobile left labeled icon positive button"
+                                           href="/trip/add-participant/{{ trip.id }}"
+                                        ><i class="user plus icon"></i>S'inscrire</a>
                                     {% endif %}
 
                                 {% endif %}
 
                                 {% if is_granted('ROLE_ADMIN') and trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and app.user != trip.organizer %}
-                                    <a class="ui right labeled icon negative button" href="/trip/action/{{ trip.id }}/cancel">Annuler<i class="times circle icon"></i></a>
+                                    <a href="/trip/action/{{ trip.id }}/cancel" class="ui vertical animated not-mobile negative button" tabindex="0">
+                                        <div class="hidden content">Annuler</div>
+                                        <div class="visible content">
+                                            <i class="times circle icon"></i>
+                                        </div>
+                                    </a>
+                                    <a href="/trip/action/{{ trip.id }}/cancel"
+                                       class="ui mobile left labeled icon negative button"
+                                    ><i class="times circle icon"></i>Annuler</a>
                                 {% endif %}
 
                             {% endif %}
-                        </div>
-
-                        <div class="ui small-view not-mobile {{ is_granted('ROLE_ADMIN') ? 'admin-view' }} floating dropdown right labeled icon primary button">
-                            Menu
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                {% if trip.status.id != constant('App\\Entity\\TripStatus::CREATION') %}
-                                    <a class="ui secondary item" href="/trip/details/{{ trip.id }}"> <i class="eye icon"></i> Afficher </a>
-                                {% endif %}
-                                {% if trip.status.id != constant('App\\Entity\\TripStatus::CLOSED') %}
-                                    {% if app.user == trip.organizer %}
-
-                                        {% if trip.status.id == constant('App\\Entity\\TripStatus::CREATION') %}
-                                            <a class="ui item" href="/trip/edit/{{ trip.id }}"> <i class="edit icon"></i> Modifier </a>
-                                            <a class="ui primary item" href="/trip/action/{{ trip.id }}/publish"> <i class="save icon"></i> Publier </a>
-                                        {% elseif trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and trip.startDate|date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris') %}
-                                            <a class="ui negative item" href="/trip/action/{{ trip.id }}/cancel"> <i class="times circle icon"></i> Annuler </a>
-                                        {% endif %}
-
-                                    {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') or trip.status.id == constant('App\\Entity\\TripStatus::FULL') %}
-                                        {% if app.user in trip.participants and trip.startDate | date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris')  %}
-                                            <a class="ui negative item" href="/trip/rem-participant/{{ trip.id }}"> <i class="user times icon"></i> Se désister </a>
-                                        {% elseif trip.status.id == constant('App\\Entity\\TripStatus::OPEN') and trip.deadLineDate | date('Y-m-d-H-i') >  "now"| date('Y-m-d-H-i', 'Europe/Paris')  %}
-                                            <a class="ui positive item" href="/trip/add-participant/{{ trip.id }}"> <i class="user plus icon"></i> S'inscrire </a>
-                                        {% endif %}
-
-                                    {% endif %}
-
-                                    {% if is_granted('ROLE_ADMIN') and trip.status.id != constant('App\\Entity\\TripStatus::CANCELED') and app.user != trip.organizer  and trip.startDate|date('Y-m-d-H-i') > "now"| date('Y-m-d-H-i', 'Europe/Paris') %}
-                                        <a class="ui negative item" href="/trip/action/{{ trip.id }}/cancel"> <i class="times circle icon"></i> Annuler</a>
-                                    {% endif %}
-
-                                {% endif %}
-                            </div>
                         </div>
                     </td>
                 </tr>

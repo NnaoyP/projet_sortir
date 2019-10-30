@@ -61,5 +61,8 @@ $(document).ready(function() {
             return `${date.getUTCFullYear()}-${month}-${day}`;
         }}
     });
+    $('tr[data-href]').on("click", function() {
+        document.location = $(this).data('href');
+    });
 });
 
