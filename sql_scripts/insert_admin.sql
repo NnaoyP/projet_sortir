@@ -1,0 +1,1 @@
+INSERT INTO `participant` (`id`, `participant_area_id`, `email`, `roles`, `password`, `last_name`, `first_name`, `phone_number`, `is_active`, `image_url`) VALUES (NULL, '1', 'admin@sortir.fr', '[\"ROLE_ADMIN\"]', '$2y$13$xuKfOGjjNP1Z2l1Ji5x.Puc5NAdC9FfVUPYZneaX.K.Zg6InFu2tS', 'Strateur', 'Admini', '0600000000', '1', NULL)
