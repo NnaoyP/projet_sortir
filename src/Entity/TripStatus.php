@@ -9,12 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TripStatus
 {
-    const CREATION = 1;
-    const OPEN = 2;
-    const FULL = 3;
-    const CLOSED = 4;
-    const DONE = 5;
-    const CANCELED = 6;
+    const CREATION = 1; //Sauvegarde
+    const OPEN = 2; //Ouverte
+    const FULL = 3; //clôturée
+    const CLOSED = 4; //Archivée
+    const DONE = 5; //Terminée
+    const CANCELED = 6; //Anullée
 
     /**
      * @ORM\Id()

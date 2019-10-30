@@ -54,7 +54,7 @@ class TripStatusManagement extends Command
                 if ($trip->getStartDate()->diff($today)->format('%d') > 30) {
                     $trip->setStatus(TripStatus::CLOSED);
                 } else {
-
+                    $trip->setStatus(TripStatus::DONE);
                 }
             }
 
