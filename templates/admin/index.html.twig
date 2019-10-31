@@ -43,21 +43,27 @@
                 <img class="ui avatar image"
                      src="/assets/images/square-image.png"
                      alt="😉"
-                     onload="this.src = getUserImage('{{ user.username }}', '{{ user.imageUrl }}'); this.onload = null">
+                     onload="this.src = getUserImage('{{ user.username }}', '{{ user.imageUrl }}', null, true); this.onload = null">
                 <div class="content">
-                    {{ user.firstName }}&nbsp;{{ user.lastName }} ({{ user.username }})
+                    {% if user.isDeleted %}
+                        Supprimé
+                    {% else %}
+                        {{ user.firstName }}&nbsp;{{ user.lastName }} ({{ user.username }})
+                    {% endif %}
                 </div>
-                <div class="right floated content">
-                    <div class="ui two large buttons">
-                        {% if user.isActive %}
-                            <a class="ui negative button" href="/admin/action/{{ user.id }}/ban">Bannir</a>
-                        {% else %}
-                            <a class="ui positive button" href="/admin/action/{{ user.id }}/unban">Débannir</a>
-                        {% endif %}
+                {% if not user.isDeleted %}
+                    <div class="right floated content">
+                        <div class="ui two large buttons">
+                            {% if user.isActive %}
+                                <a class="ui negative button" href="/admin/action/{{ user.id }}/ban">Bannir</a>
+                            {% else %}
+                                <a class="ui positive button" href="/admin/action/{{ user.id }}/unban">Débannir</a>
+                            {% endif %}
                             <div class="or" data-text="ou"></div>
-                        <a class="ui secondary button" href="/admin/action/{{ user.id }}/delete">Supprimer</a>
+                            <a class="ui secondary button" href="/admin/action/{{ user.id }}/delete">Supprimer</a>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

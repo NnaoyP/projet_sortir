@@ -49,6 +49,9 @@ $(document).ready(function() {
     $('.ui.dropdown').dropdown({
         clearable: true
     });
+    $('.popup').popup({
+        inverted: true
+    });
     $('.ui.checkbox').checkbox();
     $('.date-time').calendar({ampm: false, formatter: {
         time: (date, settings) => {

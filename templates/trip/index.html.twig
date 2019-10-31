@@ -120,25 +120,50 @@
                             </div>
                         </div>
                     </td>
-                    <td>
+                    <td class="popup"
+                        data-variation="inverted"
+                        data-inverted=""
+                        data-html='
+                            {% if trip.participants|length > 0 %}
+                            <div class="ui list">
+                                {% for participant in trip.participants %}
+                                    <div class="item">
+                                        {{ participant.isDeleted ? 'Supprimé' : participant.firstName ~ ' ' ~  participant.lastName}}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                                Aucun participants
+                            {% endif %}'
+                        >
                         {{ trip.participants|length }}/{{ trip.maxRegistrationNumber }}
                     </td>
                     <td>
                         {{ trip.status.name }}
                     </td>
                     <td>
-                        <a href="/profile/detail/{{ trip.organizer.id }}">
+                        {% if trip.organizer.isDeleted %}
                             <img class="ui avatar image"
                                  src="/assets/images/square-image.png"
                                  alt="😉"
                                  onload="this.src = getUserImage('{{ trip.organizer.username }}', '{{ trip.organizer.imageUrl }}', [218, 218, 218, 255], true); this.onload = null"/>
                             <span>
-                            {{ trip.organizer.firstname }}&nbsp;{{trip.organizer.lastname }}
-                                {% if app.user == trip.organizer %}
-                                    &nbsp;( <b>Moi</b> )
-                                {% endif %}
-                        </span>
-                        </a>
+                                Supprimé
+                            </span>
+                        {% else %}
+                            <a href="/profile/detail/{{ trip.organizer.id }}">
+                                <img class="ui avatar image"
+                                     src="/assets/images/square-image.png"
+                                     alt="😉"
+                                     onload="this.src = getUserImage('{{ trip.organizer.username }}', '{{ trip.organizer.imageUrl }}', [218, 218, 218, 255], true); this.onload = null"/>
+                                <span>
+                                        {{ trip.organizer.firstname }}&nbsp;{{trip.organizer.lastname }}
+                                        {% if app.user == trip.organizer %}
+                                            &nbsp;( <b>Moi</b> )
+                                        {% endif %}
+                                </span>
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
                         <div class="large ui two buttons">
