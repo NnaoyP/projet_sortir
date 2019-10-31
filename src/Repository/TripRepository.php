@@ -96,7 +96,7 @@ class TripRepository extends ServiceEntityRepository
         // rechercher les sorties finies
         if (!empty($args->get('isDone'))) {
             $queryBuilder->andWhere('t.status = :doneStatus')
-                ->setParameter('doneStatus', TripStatus::DONE);
+                ->setParameter('doneStatus', TripStatus::FINISHED);
         }
 
         // ne pas prendre les archivés
