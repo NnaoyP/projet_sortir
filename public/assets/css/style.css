@@ -247,10 +247,11 @@ table.linked.rows tr {
 @media screen and (min-width: 1125px) {
     .main-title {
         transform: scale(1.3) translateX(12px);
+        color: white;
     }
 
     .main-logo {
-        transform: translate(-50% ,-2px) !important;
+        transform: translate(calc(-50% - 2px) ,1px) !important;
     }
 }
 
