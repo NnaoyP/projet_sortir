@@ -236,6 +236,10 @@ table.linked.rows tr {
     border: none;
 }
 
+.ui.avatar.image {
+    object-fit: cover;
+}
+
 /*
     MEDIA
 */

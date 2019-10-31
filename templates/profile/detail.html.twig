@@ -10,6 +10,8 @@
                 <img src="/assets/images/square-image.png"
                      id="profile-picture-view"
                      alt="😉"
+                     class="medium ui image"
+                     style="object-fit: cover; max-height: 290px;"
                      onload="this.src = getUserImage('{{ participant.username }}', '{{ participant.imageUrl }}', [218, 218, 218, 255], true); this.onload = null">
                 <div class="content">
                     <a class="header">{{ participant.firstName }}&nbsp;{{ participant.lastName}}</a>

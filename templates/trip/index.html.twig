@@ -10,7 +10,7 @@
                 <div class="ten wide column">
                     <div class="field">
                         <label>Sur le site de</label>
-                        <select class="ui search dropdown" name="place">
+                        <select class="ui search dropdown" name="place" id="place">
                             <option value="">Tous</option>
                             {% for place in places %}
                                 <option value="{{ place.id }}">{{ place.name }}</option>
@@ -22,7 +22,7 @@
                         <label>Recherche dans le nom</label>
                         <div class="ui right icon input">
                             <i class="tags icon"></i>
-                            <input type="text" placeholder="ex: 'Jeu de Rôle'" name="name"/>
+                            <input type="text" placeholder="ex: 'Jeu de Rôle'" name="name" id="name"/>
                         </div>
                     </div>
 
@@ -32,13 +32,13 @@
                             <div class="ui calendar date-time field">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Date de début"  name="startDate"/>
+                                    <input type="text" placeholder="Date de début"  name="startDate" id="startDate"/>
                                 </div>
                             </div>
                             <div class="ui calendar date-time field">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input type="text" placeholder="Date de fin" name="endDate"/>
+                                    <input type="text" placeholder="Date de fin" name="endDate" id="endDate"/>
                                 </div>
                             </div>
                         </div>
@@ -48,25 +48,25 @@
                 <div class="six wide column" style="transform: translateY(18px)">
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden" name="isOrganizer">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isOrganizer" id="isOrganizer">
                             <label>Que j'ai organisé</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOn">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOn" id="isParticipantOn">
                             <label>Où je participe</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOff">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isParticipantOff" id="isParticipantOff">
                             <label>Où je ne participe pas</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input type="checkbox" tabindex="0" class="hidden" name="isDone">
+                            <input type="checkbox" tabindex="0" class="hidden" name="isDone" id="isDone">
                             <label>Finies</label>
                         </div>
                     </div>
@@ -232,4 +232,49 @@
             </tfoot>
         </table>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(() => {
+            if (window.location.search !== '') {
+                const search = window.location.search.substr(1);
+                const parameters = search.split('&');
+
+                for (const parameter of parameters) {
+                    const paramTab = parameter.split('=');
+
+                    if (paramTab.length > 1 && document.getElementById(paramTab[0])) {
+
+                        if (paramTab[0].includes('date') || paramTab[0].includes('Date')) {
+                            document.getElementById(paramTab[0]).value = paramTab[1].replace('%3A', ':').replace('+', ' ');
+
+                        } else if (document.getElementById(paramTab[0]).tagName === 'SELECT') {
+                            if (paramTab[1] !== '') {
+                                const select = document.getElementById(paramTab[0]);
+                                for (const child of select.childNodes) {
+                                    if (child.tagName === 'OPTION' && Number(child.value) === Number(paramTab[1])) {
+                                        child.defaultSelected = true;
+
+                                        select.parentNode.childNodes.forEach(value => {
+                                            if (value.tagName === 'INPUT' && value.classList.contains('search')) {
+                                                value.value = child.innerText;
+                                            }
+                                            if (value.tagName === 'DIV' && value.classList.contains('default') && value.classList.contains('text')) {
+                                                value.innerText = '';
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        } else if (document.getElementById(paramTab[0]).tagName === 'INPUT' && document.getElementById(paramTab[0]).type === 'checkbox') {
+                            document.getElementById(paramTab[0]).checked = true;
+                        } else {
+                            document.getElementById(paramTab[0]).value = paramTab[1];
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}
