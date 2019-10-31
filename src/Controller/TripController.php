@@ -244,6 +244,9 @@ class TripController extends AbstractController
                 $status = $this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED);
                 if ($trip->getStatus()->getId() != TripStatus::CANCELED) {
                     $trip->setStatus($status);
+                    foreach ($trip->getParticipants() as $tripParticipant) {
+                        $trip->removeParticipant($tripParticipant);
+                    }
                 }
                 break;
 

@@ -15,6 +15,7 @@ class TripStatus
     const CLOSED = 4; //Archivée
     const DONE = 5; //Terminée
     const CANCELED = 6; //Anullée
+    const RUNNING = 7; //En cours
 
     /**
      * @ORM\Id()
