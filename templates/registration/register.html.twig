@@ -1,25 +1,186 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Profil - Création{% endblock %}
+{% block pageTitle %}Création d'un utilisateur{% endblock %}
 
 {% block main %}
 
-
-    <div class="ui ten wide column semantic">
-        <div>
-
+    <div class="ui six wide column">
+        <div class="ui special cards">
+            <div class="card">
+                <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center" id="profile-image-buttons">
+                                <label for="registration_form_imageUrl">
+                                    <div class="ui inverted button">Changer l'image</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="/assets/images/square-image.png"
+                         id="profile-picture-view"
+                         alt="😉">
+                </div>
+            </div>
         </div>
-        {{ form_start(registrationForm) }}
-        {{ form_widget(registrationForm.lastName) }}
-        {{ form_widget(registrationForm.firstName) }}
-        {{ form_widget(registrationForm.phoneNumber) }}
-        {{ form_widget(registrationForm.participantArea) }}
-        {{ form_widget(registrationForm.plainPassword.first) }}
-        {{ form_widget(registrationForm.plainPassword.second) }}
-        {{ form_widget(registrationForm.isActive) }}
-        {{ form_widget(registrationForm.imageUrl) }}
-
-        <button class="btn">Register</button>
-        {{ form_end(registrationForm) }}
     </div>
+
+    {{ form_start(registrationForm, { 'attr': {'class': 'ui ten wide column left aligned form grid container piled segment'} }) }}
+
+        <h4 class="ui horizontal divider">
+            Informations
+        </h4>
+
+        <div class="field">
+            {{ form_label(registrationForm.lastName) }}
+            {{ form_widget(registrationForm.lastName) }}
+
+            {% if form_errors(registrationForm.lastName) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.lastName) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.firstName) }}
+            {{ form_widget(registrationForm.firstName) }}
+
+            {% if form_errors(registrationForm.firstName) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.firstName) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.phoneNumber) }}
+            {{ form_widget(registrationForm.phoneNumber) }}
+
+            {% if form_errors(registrationForm.phoneNumber) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.phoneNumber) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+
+            {% if form_errors(registrationForm.email) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.participantArea) }}
+            {{ form_widget(registrationForm.participantArea, {'attr': {
+                'class': 'ui search dropdown',
+                'onchange': 'placeSelect(this.value)'}
+            }) }}
+            {% if form_errors(registrationForm.participantArea) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.participantArea) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.plainPassword.first) }}
+            {{ form_widget(registrationForm.plainPassword.first) }}
+
+            {% if form_errors(registrationForm.plainPassword.first) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.plainPassword.second) }}
+            {{ form_widget(registrationForm.plainPassword.second) }}
+
+            {% if form_errors(registrationForm.plainPassword.second) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.plainPassword.second) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            {{ form_label(registrationForm.isActive) }}
+            {{ form_widget(registrationForm.isActive) }}
+
+            {% if form_errors(registrationForm.isActive) %}
+                <div class="ui pointing red basic label error-label">
+                    {{ form_errors(registrationForm.isActive) }}
+                </div>
+            {% endif %}
+        </div>
+        {{ form_widget(registrationForm.imageUrl, { 'attr': {'hidden': true,
+            'onchange': 'changeImagePreview(this.files)'} }) }}
+
+        <button class="ui right labeled icon green button" name="save">Modifier <i class="check icon"></i> </button>
+
+    {{ form_end(registrationForm) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function changeImagePreview(files) {
+            const reader = new FileReader();
+
+            reader.addEventListener('loadend', data => {
+                document.getElementById('profile-picture-view').src = data.target.result;
+            });
+
+            reader.readAsDataURL(files[0]);
+
+            console.log(document.getElementById('delete-user-image'));
+            if (!document.getElementById('delete-user-image')) {
+
+                const button = document.createElement('button');
+
+                button.id = 'delete-user-image';
+                button.classList.add('ui', 'inverted', 'negative', 'button');
+                button.addEventListener('click', () => deleteUserImage());
+                button.innerText = 'Supprimer';
+
+                document.getElementById('profile-image-buttons').appendChild(button);
+            }
+        }
+
+        function changeProfilePicture(img) {
+            document.getElementById('profile-picture-view').src = img;
+        }
+
+        function calcGeneratedProfilePicture() {
+            return getUserImage(document.getElementById('registration_form_email').value, '', [0,0,0,0], true);
+        }
+
+        function deleteUserImage() {
+            document.getElementById('registration_form_imageUrl').value = "";
+            changeProfilePicture(calcGeneratedProfilePicture());
+            document.getElementById('profile-image-buttons').removeChild(document.getElementById('delete-user-image'));
+        }
+
+        $(document).ready(() => {
+            changeProfilePicture(calcGeneratedProfilePicture());
+
+            document.getElementById('registration_form_email').addEventListener('keypress', () => {
+                if (document.getElementById('registration_form_imageUrl').files.length === 0) {
+                    changeProfilePicture(calcGeneratedProfilePicture());
+                }
+            });
+            document.getElementById('registration_form_email').addEventListener('input', () => {
+                if (document.getElementById('registration_form_imageUrl').files.length === 0) {
+                    changeProfilePicture(calcGeneratedProfilePicture());
+                }
+            });
+        });
+    </script>
 {% endblock %}
