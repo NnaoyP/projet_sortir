@@ -1,0 +1,3 @@
+INSERT INTO `trip` (`id`, `participant_area_id`, `status_id`, `place_id`, `organizer_id`, `name`, `start_date`, `duration`, `deadline_date`, `max_registration_number`, `description`) 
+VALUES (NULL, '1', '2', '3', '1', 'Halloween', '2019-10-31 22:15:00', '120', '2019-10-31 18:20:00', '15', 'Ouais Halloween trop bien !'), 
+(NULL, '1', '2', '3', '1', 'Noel', '2019-12-25 00:00:01', '1440', '2019-12-20 18:00:00', '30', 'Vive le vent d\'hiver !')
