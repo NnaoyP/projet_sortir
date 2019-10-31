@@ -207,7 +207,11 @@ class TripController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $em) {
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
 
-        if ($this->getUser() != $trip->getOrganizer()) {
+        if ($trip == null) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if ($this->getUser() != $trip->getOrganizer() or $trip->getStatus()->getId() != TripStatus::CREATION ) {
             throw new AccessDeniedHttpException();
         }
         // récupération du trip
