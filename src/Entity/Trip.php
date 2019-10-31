@@ -43,6 +43,7 @@ class Trip
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
+     * @Assert\GreaterThan("today", message="Votre date de sortie doit être supérieur à aujourd'hui")
      * @Assert\Expression("this.getStartDate() > this.getDeadlineDate()", message="La date limite d'inscription doit être inférieur à la date de la sortie")
      */
     private $deadlineDate;

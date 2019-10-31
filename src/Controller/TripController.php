@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -69,10 +70,15 @@ class TripController extends AbstractController
         // récupération des données non séléctionnables par l'utilisateur
         $organizer = $this->getUser();
 
-        $status = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+        $statusOpen = $em->getRepository(TripStatus::class)->find(TripStatus::OPEN);
+        $statusCreation = $em->getRepository(TripStatus::class)->find(TripStatus::CREATION);
         $places = $em->getRepository(TripPlace::class)->findAll();
 
-        $trip->setStatus($status);
+        if ($request->request->get('save') =="") {
+            $trip->setStatus($statusCreation);
+        } elseif ($request->request->get('publish' == "")) {
+            $trip->setStatus($statusOpen);
+        }
         $trip->setParticipantArea($organizer->getParticipantArea());
         $trip->setOrganizer($organizer);
         $trip->addParticipant($organizer);
@@ -82,7 +88,6 @@ class TripController extends AbstractController
 
         $tripType->handleRequest($request);
         if ($tripType->isSubmitted() && $tripType->isValid()) {
-
             $em->persist($trip);
             $em->flush();
 
@@ -200,8 +205,12 @@ class TripController extends AbstractController
      * @return Response
      */
     public function edit(Request $request, EntityManagerInterface $em) {
-        // récupération du trip
         $trip = $this->getDoctrine()->getRepository(Trip::class)->find($request->attributes->get('tripId'));
+
+        if ($this->getUser() != $trip->getOrganizer()) {
+            throw new AccessDeniedHttpException();
+        }
+        // récupération du trip
 
         // création du formulaire et association de la sortie au formulaire
         $tripType = $this->createForm(TripType::class, $trip);

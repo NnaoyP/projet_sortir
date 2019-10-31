@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\ParticipantArea;
 use App\Entity\TripStatus;
 use App\Form\UploadCsvType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,16 +22,18 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="admin")
      * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
         $participants = $this->getDoctrine()->getRepository(Participant::class)->findAll();
         $csvForm = $this->createForm(UploadCsvType::class);
         $csvForm->handleRequest($request);
 
         if ($csvForm->isSubmitted() && $csvForm->isValid() ) {
-            $csvFile = $csvForm['brochure']->getData();
+            $csvFile = $csvForm['file']->getData();
 
             if ($csvFile) {
                 $originalFilename = pathinfo($csvFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -41,9 +45,34 @@ class AdminController extends AbstractController
                         $this->getParameter('csv_directory'),
                         $newFilename
                     );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+
+                    $serializer = $this->container->get('serializer');
+                    $data = $serializer->decode(file_get_contents($this->getParameter('csv_directory').'/'.$newFilename), 'csv');
+
+                    foreach ($data as $dataParticipant) {
+                        $participant = new Participant();
+                        $participant->setParticipantArea($em->getRepository(ParticipantArea::class)->find($dataParticipant['participant_area_id']));
+                        $participant->setEmail($dataParticipant['email']);
+                        $participant->setRoles(explode(',', $dataParticipant['roles']));
+                        $participant->setPassword($passwordEncoder->encodePassword($participant, $dataParticipant['password']));
+                        $participant->setLastName($dataParticipant['last_name']);
+                        $participant->setFirstName($dataParticipant['first_name']);
+                        $participant->setPhoneNumber($dataParticipant['phone_number']);
+                        $participant->setIsActive($dataParticipant['is_active']);
+                        $participant->setIsDeleted($dataParticipant['is_deleted']);
+
+                        $em->persist($participant);
+                    }
+
+                    //suppression du fichier
+                    unlink($this->getParameter('csv_directory').'/'.$newFilename);
+
+                    $em->flush();
+                } catch(\Exception $e) {
+                    // log
+                    $csvForm->get('file')->addError(new FormError('Une erreur est survenue.'));
                 }
+
             }
         }
 
@@ -67,6 +96,15 @@ class AdminController extends AbstractController
         switch ($request->attributes->get('action')) {
             case 'ban':
                 $participant->setIsActive(false);
+                //annuler les sorties organiser par l'utilisateur
+                foreach($participant->getOrganizedTrips() as $trip) {
+                    $trip->setStatus($this->getDoctrine()->getRepository(TripStatus::class)->find(TripStatus::CANCELED));
+
+                    //désinscrire les utilisateurs des sorties de l'utilisateur
+                    foreach($trip->getParticipants() as $current_participant) {
+                        $trip->removeParticipant($current_participant);
+                    }
+                }
                 break;
 
             case 'unban':
