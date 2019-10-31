@@ -8,7 +8,7 @@ function getUserImage(username, filepath, background = [255, 255, 255, 0], color
     }
 
     const hash = sha1(username);
-    let col = [0, 0, 0, 255];
+    let col = [255, 255, 255, 255];
 
     if (colored) {
         for(let i = 0; i<3; i++) {

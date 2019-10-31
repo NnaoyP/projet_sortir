@@ -92,7 +92,7 @@ body .grid {
 
 .link-active {
     font-weight: 700 !important;
-    border-bottom: black 2px solid !important;
+    border-bottom: white 2px solid !important;
 }
 
 .underlined.field {
