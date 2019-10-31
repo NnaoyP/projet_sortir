@@ -87,6 +87,7 @@ class Participant implements UserInterface
     public function __construct()
     {
         $this->isActive = 1;
+        $this->isDeleted = 0;
         $this->setRoles(['ROLE_USER']);
         $this->organizedTrips = new ArrayCollection();
         $this->participatingTrips = new ArrayCollection();
