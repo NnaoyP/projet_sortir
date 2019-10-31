@@ -1,0 +1,3 @@
+participant_area_id,email,roles,password,last_name,first_name,phone_number,is_active,image_url,is_deleted
+1,antony.junior2019@gmail.com,ROLE_USER,antony1234,Junior,Antony,0641571181,1,,0
+1,thomas.letest2019@gmail.com,ROLE_USER,antony1234,Letest,Thomas,0641578076,1,,0
