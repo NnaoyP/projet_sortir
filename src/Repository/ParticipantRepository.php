@@ -37,6 +37,14 @@ class ParticipantRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findActiveUsers() {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.isDeleted = :value')
+            ->setParameter('value', 0)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Participant[] Returns an array of Participant objects
     //  */

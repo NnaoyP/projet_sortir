@@ -28,7 +28,7 @@ class AdminController extends AbstractController
      */
     public function index(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $participants = $this->getDoctrine()->getRepository(Participant::class)->findAll();
+        $participants = $this->getDoctrine()->getRepository(Participant::class)->findActiveUsers();
         $csvForm = $this->createForm(UploadCsvType::class);
         $csvForm->handleRequest($request);
 
