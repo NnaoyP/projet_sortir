@@ -32,7 +32,7 @@
                             <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
                         </div>
                     </div>
-                    <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
+                    <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Accueil</a>
                     {% if app.user %}
                         <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
                         <a class="item" href="/trip/add">Organiser une sortie</a>
@@ -60,7 +60,7 @@
                         <div class="content youth-power main-title black medium">Sortir <span class="blue-text">ENI</span></div>
                     </div>
                 </div>
-                <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Home</a>
+                <a class="{{ route starts with 'trip' ? 'active '}}item" href="/trip">Accueil</a>
                 {% if app.user %}
                     <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
                     <a class="item" href="/trip/add">Organiser une sortie</a>
@@ -98,17 +98,15 @@
                             </div>
                             <div class="not-mobile six wide column" style="display: flex; flex-direction: column; justify-content: center">
                                 <div class="ui large secondary pointing menu">
-                                    <a class="{{ route == '' ? 'active '}}item" href="/trip">Home</a>
+                                    <a class="{{ route == 'trip' ? 'active '}}item" href="/trip">Accueil</a>
                                     {% if app.user %}
                                         <a class="{{ route starts with 'profil_edit' ? 'active '}}item" href="/profile/edit/">Mon compte</a>
-                                        <div class="ui dropdown item {{ route starts with 'trip' ? 'link-active' }}">
+                                        <div class="ui dropdown item {{ route starts with 'trip_add' or route starts with 'trip_edit' ? 'link-active' }}">
                                             <span>
                                                 {% if route starts with 'trip_add' %}
                                                     Organiser une sortie
                                                 {% elseif route starts with 'trip_edit' %}
                                                     Modifier une sortie
-                                                {% elseif route starts with 'trip' %}
-                                                    Liste des sorties
                                                 {% else %}
                                                     Sorties
                                                 {% endif %}
@@ -178,6 +176,8 @@
 
                 <footer class="ui inverted vertical footer center aligned segment">
                     <div class="container">
+                        <p style="margin-bottom: 50px">Site web développé par <b>Thomas Rodriguez</b> et <b>Yoann Pommier</b> et présenté pour l'ENI</p>
+
                         <div class="ui stackable inverted divided equal height stackable grid">
                             <div class="six wide column">
                                 <h4 class="ui inverted header">Images/icones</h4>
@@ -190,12 +190,13 @@
                             </div>
 
                             <div class="four wide column">
-                                <p>Site web présenté par l'ENI et développé par Thomas R. et Yoann P.</p>
-                                <p>Icones crées par
-                                    <a href="https://www.flaticon.com/authors/freepik" title="Freepik"></a>
-                                    sur le site
-                                    <a href="" title="Flaticon">www.flaticon.com</a>
-                                </p>
+                                <h4 class="ui inverted header">Sites d'aide et de documentations</h4>
+                                <div class="ui inverted link list">
+                                    <a href="https://stackoverflow.com/" class="item">Stack Overflow</a>
+                                    <a href="https://developer.mozilla.org/fr/docs/Web/" class="item">Mozilla Developer Network documentation</a>
+                                    <a href="http://jsfiddle.net/" class="item">JS fiddle</a>
+                                    <a href="https://symfony.com/doc/current/" class="item">Documentation Symfony</a>
+                                </div>
                             </div>
 
                             <div class="six wide column">
